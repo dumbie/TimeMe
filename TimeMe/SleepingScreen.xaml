@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="TimeMe.SleepingScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TimeMe"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    ManipulationStarted="Page_ManipulationStarted"
+    ManipulationCompleted="Page_ManipulationCompleted"
+    DoubleTapped="Page_DoubleTap"
+    Tapped="Page_Tap"
+    FontSize="22"
+    Foreground="White"
+    Background="Black">
+
+    <Grid Name="grid_Sleepwallpaper" Background="Black">
+        <Grid Name="sp_Sleepclock" Opacity="1.00" VerticalAlignment="Bottom" Margin="40,0,0,45">
+            <StackPanel Name="sp_SleepDetails" VerticalAlignment="Bottom" Margin="0,0,0,120">
+                <StackPanel Orientation="Horizontal">
+                    <Image Name="img_BatteryLevel" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-2,0,0,0" MaxHeight="25" Source="/Assets/Icons/BatteryLevel.png"/>
+                    <TextBlock Name="txt_BatteryLevel" HorizontalAlignment="Left" VerticalAlignment="Center" Text="" Margin="5,0,8,2" FontSize="24" Style="{StaticResource TextBlockWhite}"/>
+                    <Image Name="img_WeatherIcon" HorizontalAlignment="Left" VerticalAlignment="Center" MaxHeight="25" Source="/Assets/Weather/0.png"/>
+                    <TextBlock Name="txt_WeatherIcon" HorizontalAlignment="Left" VerticalAlignment="Center" Text="" Margin="8,0,8,2" FontSize="24" Style="{StaticResource TextBlockWhite}"/>
+                    <Image Name="img_AlarmClock" HorizontalAlignment="Left" VerticalAlignment="Center" MaxHeight="25" Source="/Assets/Icons/AlarmClock.png"/>
+                </StackPanel>
+                <TextBlock Name="txt_SleepDate" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading the date..." Opacity="0.60" FontSize="24" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+            </StackPanel>
+
+            <Image Name="img_ClockAnalog" Visibility="Collapsed" MaxHeight="200" MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="/Assets/Analog/Round/1200.png"/>
+            <StackPanel Name="sp_ClockDigital" Visibility="Collapsed" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-3,0,0,0">
+                <TextBlock Name="TimeHour" Text="" FontSize="111" FontWeight="Light" Height="125" Margin="0,-95,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <TextBlock Name="TimeSplit" Text="" FontSize="111" FontWeight="Light" Height="125" Margin="0,-95,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <TextBlock Name="TimeMinute" Text="" FontSize="111" FontWeight="Light" Height="125" Margin="0,-95,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <TextBlock Name="TimeAmPm" Text="" FontSize="44" FontWeight="Light" Margin="5,0,0,15" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

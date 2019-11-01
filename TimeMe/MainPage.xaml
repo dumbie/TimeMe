@@ -1,0 +1,1284 @@
+﻿<Page
+    x:Class="TimeMe.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:TimeMe"
+    mc:Ignorable="d">
+
+    <!-- Page Grid -->
+    <Grid Name="grid_Main" Opacity="0.60" IsHitTestVisible="False">
+        <!-- Page Menu -->
+        <Grid Name="page_Menu" Background="#1D1D1D">
+            <ListBox Name="lb_Menu" SelectionMode="Single" ItemContainerStyle="{StaticResource ListBoxItemNoPadding}" Tapped="lb_Menu_Tapped">
+                <StackPanel Name="menuButtonTile" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="Manage your pinned live tiles on this tab.">
+                    <Image Source="Assets/Menu/Tile.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Tiles" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonWeather" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="View the current weather and forecast on this tab.">
+                    <Image Source="Assets/Menu/Weather.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Weather" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonCountdown" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="Checkout your countdown events on this tab.">
+                    <Image Source="Assets/Menu/Countdown.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Countdown" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonStopwatch" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="You can use the stopwatch on this tab.">
+                    <Image Source="Assets/Menu/Stopwatch.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Stopwatch" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonTimer" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="You can set a timer alarm on this tab.">
+                    <Image Source="Assets/Menu/Timer.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Timer" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonWorld" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="You can see times around the world on this tab.">
+                    <Image Source="Assets/Menu/World.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="World" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonSleepingScreen" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="Open the sleeping screen feature.">
+                    <Image Source="Assets/Menu/SleepingScreen.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Sleepscreen" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonFlashLight" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="Open the flashlight feature.">
+                    <Image Source="Assets/Menu/FlashLight.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Flashlight" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonSettings" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="Manage tile and other settings on this tab.">
+                    <Image Source="Assets/Menu/Settings.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Settings" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Name="menuButtonHelp" Style="{StaticResource ListBoxStackPanel}" ToolTipService.ToolTip="Get help for the application on this tab.">
+                    <Image Source="Assets/Menu/Help.png" Width="60" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Help" Style="{StaticResource TextBlockWhite}" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </ListBox>
+        </Grid>
+
+        <!-- Page Main -->
+        <Grid Name="page_Main" Background="#E1E1E1">
+            <!-- Page Statusbar -->
+            <StackPanel Name="sp_StatusBar" Visibility="Collapsed" Background="#1D1D1D" Opacity="0.75" VerticalAlignment="Top" Canvas.ZIndex="1">
+                <TextBlock Name="txt_StatusBar" Style="{StaticResource TextBlockWhite}" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                <ProgressBar Name="pb_StatusBar" IsIndeterminate="True" VerticalAlignment="Top"/>
+            </StackPanel>
+
+            <!-- Page Tile -->
+            <Grid Name="tab_Tile" Visibility="Collapsed">
+                <ScrollViewer Name="sv_tab_Tile" Style="{StaticResource ScrollViewerHorizontal}">
+                    <Grid Margin="5,5,5,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0" Width="310" HorizontalAlignment="Left">
+                            <ScrollViewer Style="{StaticResource ScrollViewerVertical}">
+                                <StackPanel Name="sp_tab_Tile">
+                                    <TextBlock Name="txt_LiveTileStatus" Text="Please tap on 'Pin TimeMe Live Tile' button below to begin your new live tile experience, you might need to set the used live tile size." TextWrapping="Wrap" Style="{StaticResource TextBlockBlack}"/>
+                                    <TextBlock Name="txt_WeekNumber" Margin="0,10,0,0" Text="Loading current week number." Style="{StaticResource TextBlockLightGray}"/>
+
+                                    <TextBlock Visibility="Collapsed" Name="txt_BatteryStatus" Margin="0,10,0,0" Text="Battery: loading battery status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                    <TextBlock Visibility="Collapsed" Name="txt_BatteryWarning" Text="Please make sure that TimeMe is always allowed to run in the background during your battery saver to keep the live tile up-to-date." TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                    <Button Visibility="Collapsed" Name="btn_TileBatterySettings" Style="{StaticResource ButtonAccent}" Content="Open Device Battery Saver Settings" Click="SettingsOpenBatterySettings_Click"/>
+
+                                    <Button Name="btn_PinLiveTile" IsEnabled="False" Style="{StaticResource ButtonAccent}" Margin="0,15,0,0" Content="Pin the TimeMe Time Live Tile to Start" Click="btn_PinLiveTile_Click"/>
+                                    <Button Name="btn_PinWeatherTile" IsEnabled="False" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Pin the TimeMe Weather Tile to Start" Click="btn_PinWeatherTile_Click"/>
+                                    <Button Name="btn_PinBatteryTile" IsEnabled="False" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Pin the TimeMe Battery Tile to Start" Click="btn_PinBatteryTile_Click"/>
+                                    <Button Name="btn_PinBlankTile" IsEnabled="False" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Pin a blank tile to the Start Screen" Click="btn_PinBlankTile_Click"/>
+
+                                    <Button Name="btn_LiveTileStartStop" IsEnabled="False" Style="{StaticResource ButtonAccent}" Margin="0,20,0,0" Content="Loading Live Tile Background Updates" Click="btn_LiveTileStartStop_Click"/>
+                                    <Button Name="btn_LiveTileForceUpdate" IsEnabled="False" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Force Live Tile Background Update" Click="btn_LiveTileForceUpdate_Click"/>
+                                    <Button Name="btn_DataForceUpdate" IsEnabled="False" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Force Downloading Data Update" Click="btn_DataForceUpdate_Click"/>
+
+                                    <Button Name="btn_PinSleepingScreen" Style="{StaticResource ButtonAccent}" Margin="0,20,0,0" Content="Pin the Sleeping Screen tile" Click="btn_PinSleepingScreen_Click"/>
+                                    <Button Name="btn_PinFlashlight" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Pin the Flashlight tile" Click="btn_PinFlashlight_Click"/>
+
+                                    <!-- Scroll forward button -->
+                                    <StackPanel Name="img_Tile_Forward" Orientation="Horizontal" Margin="0,15,0,0" Tapped="img_Tile_Forward_Tapped">
+                                        <Image HorizontalAlignment="Right" Source="Assets/Icons/ForwardBlack.png" Height="20" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Scroll to tile preview" Style="{StaticResource TextBlockBlack}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+
+                        <Grid Grid.Column="1" Width="310" HorizontalAlignment="Left">
+                            <ScrollViewer Name="sv_tab_Tile_Right" Style="{StaticResource ScrollViewerVertical}">
+                                <StackPanel>
+                                    <TextBlock Name="txt_LiveTileCurrent" Style="{StaticResource TextBlockBlack}"/>
+                                    <Grid Name="grid_LiveTileCurrent" HorizontalAlignment="Left">
+                                        <Image Name="img_LiveTileCurrent" Stretch="Uniform" MaxWidth="320" MaxHeight="160"/>
+                                    </Grid>
+                                    <TextBlock Name="txt_BingInformation" TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                    <TextBlock Name="txt_LiveTileUpdateTime" Style="{StaticResource TextBlockBlack}" Margin="0,15,0,0"/>
+
+                                    <Button Name="btn_ChangeLiveTileStyle" Style="{StaticResource ButtonAccent}" Margin="0,15,0,0" Content="Change the time live tile size and style" Click="btn_ChangeLiveTileStyle_Click"/>
+                                    <Button Name="btn_ChangeWeatherTileStyle" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Change the weather tile size and style" Click="btn_ChangeWeatherTileStyle_Click"/>
+                                    <Button Name="btn_ChangeBatteryTileStyle" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Change the battery tile size and style" Click="btn_ChangeBatteryTileStyle_Click"/>
+                                    <Button Name="btn_ChangeLiveTileText" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Change time live tile displayed text" Click="btn_ChangeLiveTileText_Click"/>
+
+                                    <TextBlock Text="The main menu can be scrolled and certain pages can be swiped left and right for more options when not visible or out of range." TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}" Margin="0,15,0,0"/>
+                                    <TextBlock Text="This is a beta test release so things may not always work properly, don't always rely on the time shown on the tile because it can be wrong at times." TextWrapping="Wrap" Style="{StaticResource TextBlockBlack}" Margin="0,15,0,0"/>
+
+                                    <!-- Scroll back button -->
+                                    <StackPanel Name="img_Tile_Back" Orientation="Horizontal" Margin="0,15,0,0" Tapped="img_Tile_Back_Tapped">
+                                        <Image HorizontalAlignment="Right" Source="Assets/Icons/BackBlack.png" Height="20" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Scroll to tile setup" Style="{StaticResource TextBlockBlack}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+
+                        <Image Name="grid_TileLogo" Grid.Column="2" MaxWidth="680" Opacity="0.25" Source="Assets/Backgrounds/Tile.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Page Weather -->
+            <Grid Name="tab_Weather" Visibility="Collapsed">
+                <Image Name="tab_Weather_ImgTemperaturePre" Stretch="UniformToFill"/>
+                <Image Name="tab_Weather_ImgTemperatureCur" Stretch="UniformToFill"/>
+                <Image Name="tab_Weather_ImgWallpaper" Opacity="0.25" Stretch="UniformToFill"/>
+
+                <StackPanel Margin="5,5,5,5">
+                    <TextBlock Name="txt_ForecastInformation" Style="{StaticResource TextBlockPageTitleBlack}" Text="Loading weather information please wait..."/>
+                    <StackPanel Name="sp_WeatherCurrent" Visibility="Collapsed">
+                        <TextBlock Name="txt_ForecastLocation" Margin="0,-5,0,0" Style="{StaticResource TextBlockPageTitleWhite}" FontWeight="Normal"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Name="img_ForecastIcon" Height="25" Margin="0,0,10,0"/>
+                            <TextBlock Name="txt_ForecastTemperatureHigh" Style="{StaticResource TextBlockPageTitleWhite}" Foreground="#FF3900"/>
+                            <TextBlock Name="txt_ForecastTemperatureLow" Style="{StaticResource TextBlockPageTitleWhite}" Foreground="#00C6FF"/>
+                            <TextBlock Name="txt_ForecastCondition" Margin="6,0,0,0" Style="{StaticResource TextBlockPageTitleWhite}"/>
+                        </StackPanel>
+                        <StackPanel Name="sp_WeatherPrecipitation" Orientation="Horizontal" Margin="0,1,0,0">
+                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Precipitation.png"/>
+                            <TextBlock Name="txt_WeatherPrecipitation" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Name="sp_WeatherHumidity" Orientation="Horizontal" Margin="2.5,1,0,0">
+                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Humidity.png"/>
+                            <TextBlock Margin="1,0,0,0" Name="txt_WeatherHumidity" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Name="sp_WeatherVisibility" Orientation="Horizontal" Margin="0,1,0,0">
+                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Visibility.png"/>
+                            <TextBlock Name="txt_WeatherVisibility" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Name="sp_WeatherWindSpeed" Orientation="Horizontal" Margin="0,1,0,0">
+                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_WindSpeed.png"/>
+                            <TextBlock Name="txt_WeatherWindSpeed" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Name="sp_WeatherPressure" Orientation="Horizontal" Margin="0,1,0,0">
+                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Pressure.png"/>
+                            <TextBlock Name="txt_WeatherPressure" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Name="sp_WeatherUv" Orientation="Horizontal" Margin="0,1,0,0">
+                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_UvIndex.png"/>
+                            <TextBlock Name="txt_WeatherUv" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Name="sp_WeatherSunrise" Orientation="Horizontal">
+                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Sunrise.png"/>
+                            <TextBlock Name="txt_WeatherSunrise" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Name="sp_WeatherSunset" Orientation="Horizontal">
+                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Sunset.png"/>
+                            <TextBlock Name="txt_WeatherSunset" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <ScrollViewer Name="sv_WeatherForecast" Style="{StaticResource ScrollViewerHorizontal}" VerticalAlignment="Bottom">
+                    <StackPanel>
+                        <TextBlock Name="txt_ForecastLastupdate" Margin="5,0,0,0" Style="{StaticResource TextBlockWhite}" Opacity="0.60"/>
+                        <ListBox Name="lb_ForecastListBox" Style="{StaticResource ListBoxHorizontal}" SelectionMode="Single" Tapped="lb_ForecastListBox_Tapped">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="-5,-5,-5,-5">
+                                        <StackPanel.Background>
+                                            <SolidColorBrush Color="White" Opacity="0.12"/>
+                                        </StackPanel.Background>
+                                        <StackPanel Margin="5,5,5,5">
+                                            <TextBlock Text="{Binding WeatherDate}" Style="{StaticResource TextBlockWhite}" FontWeight="SemiBold"/>
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Height="30" HorizontalAlignment="Left" Source="{Binding WeatherIcon}"/>
+                                                    <TextBlock Margin="3,18,0,0" Text="{Binding WeatherConditionDay}" Style="{StaticResource TextBlockWhite}"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                                                    <Image Height="18" Margin="0,0,5,0" Source="Assets/WeatherOther/tab_Temperature.png"/>
+                                                    <TextBlock Text="{Binding WeatherTempHigh}" Style="{StaticResource TextBlockWhite}" Foreground="#FF3900"/>
+                                                    <TextBlock Text=" High" Margin="0,0,5,0" Style="{StaticResource TextBlockWhite}"/>
+                                                    <TextBlock Text="{Binding WeatherTempLow}" Style="{StaticResource TextBlockWhite}" Foreground="#00C6FF"/>
+                                                    <TextBlock Text=" Low" Style="{StaticResource TextBlockWhite}"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                                                    <Image Height="18" Margin="0,0,5,0" Source="Assets/WeatherOther/tab_Precipitation.png"/>
+                                                    <TextBlock Text="{Binding WeatherPrecipitation}" Style="{StaticResource TextBlockWhite}"/>
+                                                    <Image Height="18" Margin="5,0,5,0" Source="Assets/WeatherOther/tab_WindSpeed.png"/>
+                                                    <TextBlock Text="{Binding WeatherWindSpeed}" Style="{StaticResource TextBlockWhite}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Page Countdown -->
+            <Grid Name="tab_Countdown" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Width="315" Margin="5,5,5,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,0,0,5">
+                                <Button Style="{StaticResource ButtonAccent}" Name="btn_CountdownAddEvent" Content="Add Event" Click="btn_CountdownAddEvent_Click"/>
+                                <Button Style="{StaticResource ButtonAccent}" Name="btn_CountdownRemoveEvent" Margin="5,0,0,0" Content="Remove Event" Click="btn_CountdownRemoveEvent_Click"/>
+                                <Button Style="{StaticResource ButtonAccent}" Name="btn_CountdownRefresh" Margin="5,0,0,0" Content="Refresh" Click="btn_CountdownRefresh_Click"/>
+                            </StackPanel>
+                            <DatePicker Name="datepick_CountDate" Margin="0,0,0,5"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                <TextBlock Text="Name:" VerticalAlignment="Center" Style="{StaticResource TextBlockBlack}"/>
+                                <TextBox Name="txtbox_CountName" Style="{StaticResource TextBox}" Width="248" Margin="5,0,0,5" IsSpellCheckEnabled="False" KeyUp="txtbox_CountName_KeyUp"/>
+                            </StackPanel>
+
+                            <TextBlock Name="txt_CountdownDates" Text="Currently set event countdown dates:" Style="{StaticResource TextBlockBlack}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <ListBox Name="lb_CountdownListBox" SelectionMode="Multiple" Style="{StaticResource ListBoxVertical}" Margin="-5,0,0,0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding CountDays}" Style="{StaticResource TextBlockAccent}" FontSize="35" VerticalAlignment="Bottom"/>
+                                        <TextBlock Style="{StaticResource TextBlockBlack}" VerticalAlignment="Bottom" Margin="0,0,0,5">
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding CountName}"/>
+                                        </TextBlock>
+                                        <TextBlock Style="{StaticResource TextBlockLightGray}" VerticalAlignment="Bottom" Margin="0,0,0,5">
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding CountDate}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+                <Image Name="grid_CountdownLogo" Grid.Column="1" MaxWidth="660" Opacity="0.25" Source="Assets/Backgrounds/Countdown.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- Page Stopwatch -->
+            <Grid Name="tab_Stopwatch" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Width="315" Margin="5,5,5,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                <Button Style="{StaticResource ButtonAccent}" Name="btn_StopWatchStartSplit" Content="Start Time" Click="btn_StopWatchStartSplit_Click"/>
+                                <Button Style="{StaticResource ButtonAccent}" Name="btn_StopWatchPauseReset" Margin="5,0,0,0" Content="Pause Watch" IsEnabled="False" Click="btn_StopWatchStopReset_Click"/>
+                                <Button Style="{StaticResource ButtonAccent}" Name="btn_StopWatchClearSplits" Margin="5,0,0,0" Content="Clear Splits" IsEnabled="False" Click="btn_StopWatchClearTimes_Click"/>
+                            </StackPanel>
+
+                            <TextBlock Name="txt_StopWatchInfo" Text="The stopwatch is currently not running." Style="{StaticResource TextBlockLightGray}"/>
+                            <TextBlock Name="txt_StopWatchTimeTotal" Text="00:00:00,00" FontWeight="Light" FontSize="60"/>
+                            <StackPanel Name="stkp_StopWatchTimeSplit" Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="Split:" Margin="0,-2,5,0" FontSize="30" Style="{StaticResource TextBlockLightGray}"/>
+                                <TextBlock Name="txt_StopWatchTimeSplit" Text="00:00:00,00" FontSize="30" Style="{StaticResource TextBlockLightGray}"/>
+                            </StackPanel>
+
+                            <TextBlock Name="txt_StopWatchPrevTimes" Text="There are no stopwatch split times set." Style="{StaticResource TextBlockBlack}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <ListBox Name="lb_StopWatchListBox" Style="{StaticResource ListBoxVertical}" ItemContainerStyle="{StaticResource ListBoxItemDisabled}" Margin="-8,0,0,0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,-10">
+                                        <TextBlock Text="{Binding SplitIdStart}" Style="{StaticResource TextBlockAccent}"/>
+                                        <TextBlock Style="{StaticResource TextBlockBlack}">
+                                            <Run Text="{Binding SplitId}"/>
+                                            <Run Text="{Binding Split}"/>
+                                        </TextBlock>
+                                        <TextBlock Style="{StaticResource TextBlockLightGray}">
+                                            <Run Text=" "/>
+                                            <Run Text="{Binding Total}"/>
+                                        </TextBlock>
+                                        <TextBlock Style="{StaticResource TextBlockAccent}">
+                                            <Run Text=" "/>
+                                            <Run Text="{Binding Date}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+                <Image Name="grid_StopwatchLogo" Grid.Column="1" MaxWidth="490" Opacity="0.25" Source="Assets/Backgrounds/Stopwatch.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- Page Timer -->
+            <Grid Name="tab_Timer" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Width="315" Margin="5,5,5,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                <Button Style="{StaticResource ButtonAccent}" Content="Add Timer" Click="btn_TimerAdd_Click"/>
+                                <Button Style="{StaticResource ButtonAccent}" Name="btn_TimerRemove" Margin="5,0,0,0" Content="Remove Timer" Click="btn_TimerRemove_Click" IsEnabled="False"/>
+                                <Button Style="{StaticResource ButtonAccent}" Name="btn_TimerRefresh" Margin="5,0,0,0" Content="Refresh" Click="btn_TimerRefresh_Click"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Enter a time for the timer alarm to go off in:" Margin="0,5,0,5" Style="{StaticResource TextBlockBlack}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Name="txtbox_TimerDays" InputScope="Number" MaxLength="2" Style="{StaticResource TextBox}"/>
+                                <TextBlock Margin="2,0,5,0" Text="Day" VerticalAlignment="Center" Style="{StaticResource TextBlockBlack}"/>
+                                <TextBox Name="txtbox_TimerHours" InputScope="Number" MaxLength="2" Style="{StaticResource TextBox}"/>
+                                <TextBlock Margin="2,0,5,0" Text="Hour" VerticalAlignment="Center" Style="{StaticResource TextBlockBlack}"/>
+                                <TextBox Name="txtbox_TimerMinutes" InputScope="Number" MaxLength="2" Style="{StaticResource TextBox}"/>
+                                <TextBlock Margin="2,0,0,0" Text="Min" VerticalAlignment="Center" Style="{StaticResource TextBlockBlack}"/>
+                            </StackPanel>
+
+                            <TextBlock Name="txt_ActiveTimers" Text="Loading timer alarms..." TextWrapping="Wrap" Style="{StaticResource TextBlockBlack}" Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <ListBox Name="lb_TimerListBox" SelectionMode="Multiple" Style="{StaticResource ListBoxVertical}" Margin="-5,0,0,0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Style="{StaticResource TextBlockBlack}">
+                                            <Run Text="{Binding TimerContent}"/>
+                                        </TextBlock>
+                                        <TextBlock Style="{StaticResource TextBlockLightGray}">
+                                            <Run Text="Alarm time:"/>
+                                            <Run Text="{Binding TimerTime}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+                <Image Name="grid_TimerLogo" Grid.Column="1"  MaxWidth="630" Opacity="0.25" Source="Assets/Backgrounds/Timer.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- Page World -->
+            <Grid Name="tab_World" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Width="315" Margin="5,5,5,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <TextBlock Text="Current times in major cities over the world:" Margin="0,-2,0,0" Style="{StaticResource TextBlockBlack}"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <ListBox Name="lb_WorldListBox" Margin="-12,5,0,0" Style="{StaticResource ListBoxVertical}" ItemContainerStyle="{StaticResource ListBoxItemDisabled}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,-10,0,-10">
+                                        <Image Height="52" Source="{Binding AmPm}" Margin="-5,-6,2,0"/>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding City}" Style="{StaticResource TextBlockBlack}"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Day}" Style="{StaticResource TextBlockLightGray}"/>
+                                                <TextBlock Text="{Binding Zone}" Style="{StaticResource TextBlockLightGray}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+                <Image Name="grid_WorldLogo" Grid.Column="1" MaxWidth="1280" Opacity="0.25" Source="Assets/Backgrounds/World.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- Page Settings -->
+            <Grid Name="tab_Settings" Visibility="Collapsed">
+                <ScrollViewer Name="sv_tab_Settings" Style="{StaticResource ScrollViewerHorizontal}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0" Width="250" Margin="0,0,5,0" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                            <ListBox Name="lb_Settings" SelectionMode="Single" Style="{StaticResource ListBoxVertical}" Tapped="lb_Settings_Tapped">
+                                <StackPanel Name="MenuSet_LiveSizeStyle">
+                                    <TextBlock Text="Time Live Tile Size and Style" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_WeatherSizeStyle">
+                                    <TextBlock Text="Weather Tile Size and Style" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_BatterySizeStyle">
+                                    <TextBlock Text="Battery Tile Size and Style" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_TileDisplay">
+                                    <TextBlock Text="Text Display Settings" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_FontFamily">
+                                    <TextBlock Text="Select Live Tile Font Family" Style="{StaticResource TextBlockSettingTitleWhiteLight}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_FontColor" Orientation="Horizontal">
+                                    <TextBlock Text="Select Live Tile Font " Style="{StaticResource TextBlockSettingTitleWhiteLight}"/>
+                                    <TextBlock Name="MenuSet_FontColorPreview" Text="Color" Style="{StaticResource TextBlockSettingTitleWhiteLight}" Margin="5,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_Background">
+                                    <TextBlock Text="Background Settings" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_BackgroundColor" Orientation="Horizontal">
+                                    <TextBlock Text="Select Tile Background " Style="{StaticResource TextBlockSettingTitleWhiteLight}"/>
+                                    <TextBlock Name="MenuSet_BackgroundColorPreview" Text="Color" Style="{StaticResource TextBlockSettingTitleWhiteLight}" Margin="5,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_BackgroundPhoto">
+                                    <TextBlock Text="Select Background Photo" Style="{StaticResource TextBlockSettingTitleWhiteLight}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_Weather">
+                                    <TextBlock Text="Weather Settings" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_Download">
+                                    <TextBlock Text="Download Settings" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_Lockscreen">
+                                    <TextBlock Text="Lock screen Settings" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_Notification">
+                                    <TextBlock Text="Notification Settings" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_SleepFlash">
+                                    <TextBlock Text="Sleep and Flash Screen" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_NfcTags">
+                                    <TextBlock Text="Write new NFC Tags" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                                <StackPanel Name="MenuSet_Other">
+                                    <TextBlock Text="Other Settings" Style="{StaticResource TextBlockSettingTitleWhiteNormal}"/>
+                                </StackPanel>
+                            </ListBox>
+                        </Grid>
+
+                        <Grid Grid.Column="1" Width="300" Margin="5,5,5,5">
+                            <ScrollViewer Name="sv_tab_Settings_Right" Style="{StaticResource ScrollViewerVertical}">
+                                <StackPanel>
+                                    <!-- Scroll back button -->
+                                    <StackPanel Name="img_Settings_Back" Tapped="img_Settings_Back_Tapped" Orientation="Horizontal" Margin="0,0,0,10">
+                                        <Image HorizontalAlignment="Right" Source="Assets/Icons/BackBlack.png" Height="20" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Scroll to settings menu" Style="{StaticResource TextBlockBlack}"/>
+                                    </StackPanel>
+                                    <!-- Tile Display Settings -->
+                                    <StackPanel Name="Set_TileDisplay" Margin="0,0,10,0">
+                                        <TextBlock Text="Text Display Settings" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Name="cb_SettingsDisplayRegionLanguage" Content="Display info as keyboard language:" Style="{StaticResource CheckBox}"/>
+                                            <TextBlock Name="txtbox_SettingsDisplayRegionLanguage" Style="{StaticResource TextBlockLightGray}" Margin="5,6,0,0"/>
+                                        </StackPanel>
+                                        <TextBlock Text="Enabling this will show some information like the date and weather if available as your keyboard language instead of English on the live tile and other application features that display the date and weather." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDisplay24hClock" Content="Display time as an 24-hour clock" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the clock as 24h instead of 12h on the live tile and other application features that display the time." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDisplayAMPMClock" Content="Display the time with AM or PM" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the time with AM or PM on the live tile and other application features that display the current time." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <TextBlock Text="Select the displayed time splitter style:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="Choose your time splitter text style for the live tile and other application features that displays the current time as main purpose." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="cb_SettingsDisplayTimeSplitter" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content=":"/>
+                                            <ComboBoxItem Content="."/>
+                                            <ComboBoxItem Content=","/>
+                                            <ComboBoxItem Content="_"/>
+                                            <ComboBoxItem Content="-"/>
+                                            <ComboBoxItem Content="+"/>
+                                            <ComboBoxItem Content="x"/>
+                                            <ComboBoxItem Content="|"/>
+                                            <ComboBoxItem Content="!"/>
+                                            <ComboBoxItem Content="*"/>
+                                            <ComboBoxItem Content="@"/>
+                                            <ComboBoxItem Content="#"/>
+                                            <ComboBoxItem Content="&amp;"/>
+                                            <ComboBoxItem Content="̥"/>
+                                            <ComboBoxItem Content="͓"/>
+                                            <ComboBoxItem Content="Space"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="Time Live Tile Display Settings" Margin="0,15,0,0" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsDisplayCurrentTime" Content="Display current time on live tile" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the current time on the pinned time live tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <CheckBox Name="cb_SettingsDisplayTimeCustomText" Content="Replace current time with custom text" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will replace the current time on the live tile with a custom set text." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <StackPanel Name="tab_SettingsDisplayTimeCustomTextString" Visibility="Collapsed">
+                                            <TextBlock Text="Please enter your custom time text:" Style="{StaticResource TextBlockBlack}"/>
+                                            <TextBlock Text="*time* will be replaced with the time." Style="{StaticResource TextBlockAccent}"/>
+                                            <!--<TextBlock Text="*timett* will be replaced with AM or PM." Style="{StaticResource TextBlockAccent}"/>-->
+                                            <TextBlock Text="*weather* *battery* *location* *network*" Style="{StaticResource TextBlockAccent}"/>
+                                            <TextBox Name="txtbox_SettingsDisplayTimeCustomTextString" Width="250" Style="{StaticResource TextBox}" IsSpellCheckEnabled="False"/>
+                                        </StackPanel>
+
+                                        <CheckBox Name="cb_SettingsDisplayDateYear" Content="Add the current year to the date" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will add the current year to the date on the live tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDisplayDateWeekNumber" Content="Add the week number to the date" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will add the week number to the date on the live tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <CheckBox Name="cb_SettingsDisplayAlarm" Content="Display timer alarm status on live tile" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display an alarm clock icon or text line when a TimeMe timer alarm is currently active on the live tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <TextBlock Text="Time text horizontal alignment:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="Choose the horizontal position where you want the time to be displayed, changing this setting disables AM/PM display." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="cb_SettingsDisplayHorizontalAlignmentTime" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="Default"/>
+                                            <ComboBoxItem Content="Left"/>
+                                            <ComboBoxItem Content="Center"/>
+                                            <ComboBoxItem Content="Right"/>
+                                        </ComboBox>
+
+                                        <Button Name="btn_TextPositionPreview" Content="Show possible time tile text positions" Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Click="btn_TextPositionPreview_Click"/>
+                                        <Grid Name="grid_TextPositionPreview" HorizontalAlignment="Left" Margin="0,5,0,0" Visibility="Collapsed">
+                                            <Image Name="img_TextPositionPreview" Stretch="Uniform" MaxWidth="320" MaxHeight="160"/>
+                                        </Grid>
+
+                                        <TextBlock Text="Text on the first (1) display position:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="Choose the text you want to be displayed on the first (1) time live tile text position." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="cb_SettingsDisplayPosition1" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="No information"/>
+                                            <ComboBoxItem Content="Current day name"/>
+                                            <ComboBoxItem Content="Date and month"/>
+                                            <ComboBoxItem Content="Day, date and month"/>
+                                            <ComboBoxItem Content="Day time progression"/>
+                                            <ComboBoxItem Content="Current week number"/>
+                                            <ComboBoxItem Content="Weather, temperature"/>
+                                            <ComboBoxItem Content="Weather description only"/>
+                                            <ComboBoxItem Content="Temperature degrees text"/>
+                                            <ComboBoxItem Content="Temperature degrees symbol"/>
+                                            <ComboBoxItem Content="Temperature with ascii icon"/>
+                                            <ComboBoxItem Content="Current chance of rain"/>
+                                            <ComboBoxItem Content="Current wind speed and direction"/>
+                                            <ComboBoxItem Content="Location town name"/>
+                                            <ComboBoxItem Content="Device battery level"/>
+                                            <ComboBoxItem Content="Calendar event name"/>
+                                            <ComboBoxItem Content="Calendar event time"/>
+                                            <ComboBoxItem Content="Countdown event"/>
+                                            <ComboBoxItem Content="Network name"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="Text on the second (2) display position:" Margin="0,5,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <ComboBox Name="cb_SettingsDisplayPosition2" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="No information"/>
+                                            <ComboBoxItem Content="Current day name"/>
+                                            <ComboBoxItem Content="Date and month"/>
+                                            <ComboBoxItem Content="Day, date and month"/>
+                                            <ComboBoxItem Content="Day time progression"/>
+                                            <ComboBoxItem Content="Current week number"/>
+                                            <ComboBoxItem Content="Weather, temperature"/>
+                                            <ComboBoxItem Content="Weather description only"/>
+                                            <ComboBoxItem Content="Temperature degrees text"/>
+                                            <ComboBoxItem Content="Temperature degrees symbol"/>
+                                            <ComboBoxItem Content="Temperature with ascii icon"/>
+                                            <ComboBoxItem Content="Current chance of rain"/>
+                                            <ComboBoxItem Content="Current wind speed and direction"/>
+                                            <ComboBoxItem Content="Location town name"/>
+                                            <ComboBoxItem Content="Device battery level"/>
+                                            <ComboBoxItem Content="Calendar event name"/>
+                                            <ComboBoxItem Content="Calendar event time"/>
+                                            <ComboBoxItem Content="Countdown event"/>
+                                            <ComboBoxItem Content="Network name"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="Text on the third (3) display position:" Margin="0,5,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <ComboBox Name="cb_SettingsDisplayPosition3" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="No information"/>
+                                            <ComboBoxItem Content="Current day name"/>
+                                            <ComboBoxItem Content="Date and month"/>
+                                            <ComboBoxItem Content="Day, date and month"/>
+                                            <ComboBoxItem Content="Day time progression"/>
+                                            <ComboBoxItem Content="Current week number"/>
+                                            <ComboBoxItem Content="Weather, temperature"/>
+                                            <ComboBoxItem Content="Weather description only"/>
+                                            <ComboBoxItem Content="Temperature degrees text"/>
+                                            <ComboBoxItem Content="Temperature degrees symbol"/>
+                                            <ComboBoxItem Content="Temperature with ascii icon"/>
+                                            <ComboBoxItem Content="Current chance of rain"/>
+                                            <ComboBoxItem Content="Current wind speed and direction"/>
+                                            <ComboBoxItem Content="Location town name"/>
+                                            <ComboBoxItem Content="Device battery level"/>
+                                            <ComboBoxItem Content="Calendar event name"/>
+                                            <ComboBoxItem Content="Calendar event time"/>
+                                            <ComboBoxItem Content="Countdown event"/>
+                                            <ComboBoxItem Content="Network name"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="Text on the fourth (4) display position:" Margin="0,5,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <ComboBox Name="cb_SettingsDisplayPosition4" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="No information"/>
+                                            <ComboBoxItem Content="Current day name"/>
+                                            <ComboBoxItem Content="Date and month"/>
+                                            <ComboBoxItem Content="Day, date and month"/>
+                                            <ComboBoxItem Content="Day time progression"/>
+                                            <ComboBoxItem Content="Current week number"/>
+                                            <ComboBoxItem Content="Weather, temperature"/>
+                                            <ComboBoxItem Content="Weather description only"/>
+                                            <ComboBoxItem Content="Temperature degrees text"/>
+                                            <ComboBoxItem Content="Temperature degrees symbol"/>
+                                            <ComboBoxItem Content="Temperature with ascii icon"/>
+                                            <ComboBoxItem Content="Current chance of rain"/>
+                                            <ComboBoxItem Content="Current wind speed and direction"/>
+                                            <ComboBoxItem Content="Location town name"/>
+                                            <ComboBoxItem Content="Device battery level"/>
+                                            <ComboBoxItem Content="Calendar event name"/>
+                                            <ComboBoxItem Content="Calendar event time"/>
+                                            <ComboBoxItem Content="Countdown event"/>
+                                            <ComboBoxItem Content="Network name"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="Weather Tile Display Settings" Margin="0,10,0,0" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsDisplayWeatherTempHighLow" Content="Display high&amp;low temp on weather tile" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the highest and lowest day temperature on the weather tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDisplayWeatherTileLocation" Content="Display location on the weather tile" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the current location obtained from the weather updates on the weather tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDisplayWeatherTileProvider" Content="Display provider on the weather tile" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the weather provider obtained from the weather updates on the weather tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDisplayWeatherTileUpdateTime" Content="Display update time on weather tile" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the last successful weather update time on the weather tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <TextBlock Text="* Some of the above options are limited to certain tile styles and may not have any effect on your currently selected tile style." Margin="0,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                    </StackPanel>
+
+                                    <!-- Background Settings -->
+                                    <StackPanel Name="Set_Background" Margin="0,0,10,0" Visibility="Collapsed">
+                                        <TextBlock Text="Background Settings" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsDisplayBackgroundColor" Content="Display background color on live tile" Style="{StaticResource CheckBox}"/>
+                                        <CheckBox Name="cb_SettingsDisplayBackgroundColorWeather" Content="Display background on weather tile" Style="{StaticResource CheckBox}"/>
+                                        <CheckBox Name="cb_SettingsDisplayBackgroundColorBattery" Content="Display background on battery tile" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will replace the background photo or transparency with your currently selected background color on the tiles." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDisplayBackgroundPhoto" Content="Display background photo on live tile" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <CheckBox Name="cb_SettingsDisplayBackgroundPhotoWeather" Content="Display background on weather tile" Style="{StaticResource CheckBox}"/>
+                                        <CheckBox Name="cb_SettingsDisplayBackgroundPhotoBattery" Content="Display background on battery tile" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will replace the background color or transparency with your currently selected background or daily Bing background photo on the tiles." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <TextBlock Text="Display background photo brightness" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following slider will change the background photo's brightness to your liking so text might be easier to read on your live tile." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <Slider Name="sldr_SettingsDisplayBackgroundBrightness" Minimum="20" StepFrequency="10" Width="250" HorizontalAlignment="Left"/>
+                                        <CheckBox Name="cb_SettingsDeviceWallpaper" Content="Display the background on device" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your current background photo on your device's start screen or as desktop wallpaper." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDownloadBingWallpaper" Content="Download Bing's daily background" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will download the daily Bing background every day in the background so that it can be used on the live tile and in the application to have something new to view every day." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <TextBlock Text="Bing's daily background download region:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will be used as the Bing's background download region, some regions have different daily backgrounds." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingDownloadBingRegion" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="Keyboard Region"/>
+                                            <ComboBoxItem Content="United States"/>
+                                            <ComboBoxItem Content="Great Britain"/>
+                                            <ComboBoxItem Content="Australia"/>
+                                            <ComboBoxItem Content="Germany"/>
+                                            <ComboBoxItem Content="Canada"/>
+                                            <ComboBoxItem Content="Japan"/>
+                                            <ComboBoxItem Content="China"/>
+                                            <ComboBoxItem Content="France"/>
+                                            <ComboBoxItem Content="Brazil"/>
+                                            <ComboBoxItem Content="New Zealand"/>
+                                        </ComboBox>
+                                        <TextBlock Text="Bing's background download resolution:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will set the download resolution of the Bing's background, the higher the resolution the better it will look but it will also increase your bandwidth usage." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingDownloadBingResolution" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="1920x1080 (16:9 ~300 KB)"/>
+                                            <ComboBoxItem Content="1280x720 (16:9 ~150 KB)"/>
+                                            <ComboBoxItem Content="1080x1920 (9:16 ~300 KB)"/>
+                                            <ComboBoxItem Content="720x1280 (9:16 ~150 KB)"/>
+                                            <ComboBoxItem Content="1024x768 (4:3 ~100 KB)"/>
+                                        </ComboBox>
+
+                                        <TextBlock Name="txt_LiveTileBackground" Style="{StaticResource TextBlockBlack}" Margin="0,10,0,0"/>
+                                        <Grid Name="grid_LiveTileBackground" HorizontalAlignment="Left">
+                                            <Image Name="img_LiveTileBackground" Stretch="Uniform" MaxWidth="320" MaxHeight="160"/>
+                                        </Grid>
+                                        <Button Name="btn_SaveLiveTileBackground" Style="{StaticResource ButtonAccent}" Content="Save background photo to your device" Margin="0,10,0,0" Click="CurrentBackgroundSave_Click"/>
+
+                                        <TextBlock Text="* You can also display the background on your lock screen or sleeping screen by enabling it on the 'Lock screen Settings' or 'Sleep and Flash Screen' tab." Margin="0,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                    </StackPanel>
+
+                                    <!-- Weather Settings -->
+                                    <StackPanel Name="Set_Weather" Margin="0,0,10,0" Visibility="Collapsed">
+                                        <TextBlock Text="Weather Settings" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsDownloadWeather" Content="Download weather information" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will download weather updates in the background that can be used on the live tile and in the application to provide you with the current weather and forecast information for the coming days." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <CheckBox Name="cb_SettingsDisplayWeatherWhiteIcons" Content="Display white only weather icons" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will replace the colored weather icons with white weather icons." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <CheckBox Name="cb_SettingsWeatherDisplayWallpaper" Content="Display background on weather page" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your current background photo on the weather page as the background with a temperature color tint." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <CheckBox Name="cb_SettingsWeatherGpsLocation" Content="Use GPS for your weather location" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will use your device's GPS capability to receive your current location and get the latest weather updates from there, if you disable this feature you can enter a new city and country manually." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <StackPanel Name="tab_SettingsWeatherNonGpsLocation" Visibility="Collapsed">
+                                            <TextBlock Text="Please enter your manual weather location:" Style="{StaticResource TextBlockBlack}"/>
+                                            <TextBlock Text="Example: New York, United States" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBox Name="txtbox_SettingsWeatherNonGpsLocation" Width="250" Style="{StaticResource TextBox}" IsSpellCheckEnabled="False"/>
+                                        </StackPanel>
+
+                                        <TextBlock Text="Download the weather units as:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will be used as your weather units when downloading the latest weather updates for your location." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingFahrenheitCelsius" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="Fahrenheit / Imperial"/>
+                                            <ComboBoxItem Content="Celsius / Metric"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="* You can change the weather update interval on the 'Download Settings' tab to update from every 30 minutes or to just once a day to save your bandwidth." Margin="0,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                        <TextBlock Text="* You can also let the app show a notification message when the weather updates by enabling the setting on the 'Lock and Notify Settings' tab." Margin="0,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                    </StackPanel>
+
+                                    <!-- Download Settings -->
+                                    <StackPanel Name="Set_Download" Margin="0,0,10,0" Visibility="Collapsed">
+                                        <TextBlock Text="Download Settings" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsBackgroundDownload" Content="Allow updates from the internet" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will allow downloading weather updates and the Bing daily background in the background that will be used on the live tile and in the application." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsDownloadWifiOnly" Content="Download updates over Wi-Fi only" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will disable background updates when you are not connected to a Wi-Fi connection to save your cellular data's monthly bandwidth, this may however lead to your current weather and Bing background not been up-to-date at all times." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <TextBlock Text="Background download update interval:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will be the time between background download updates, from every 30 minutes to just once a day, if you want your weather information to be as fresh as possible you could set it to 30 minutes but this will also use more of your bandwidth." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingBackgroundDownloadInterval" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="Every 30 Minutes"/>
+                                            <ComboBoxItem Content="Every 1 Hour"/>
+                                            <ComboBoxItem Content="Every 2 Hours"/>
+                                            <ComboBoxItem Content="Every 4 Hours"/>
+                                            <ComboBoxItem Content="Every 8 Hours"/>
+                                            <ComboBoxItem Content="Every 12 Hours"/>
+                                            <ComboBoxItem Content="Every 1 Day"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="* Background download updates might fail because your device turns off your connectivity to save your battery when it is in standby mode, TimeMe will however try to download the requested updates again as soon as your device wakes up." Margin="0,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                    </StackPanel>
+
+                                    <!-- Lock screen Settings -->
+                                    <StackPanel Name="Set_Lockscreen" Margin="0,0,10,0" Visibility="Collapsed">
+                                        <TextBlock Text="Lock screen Settings" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsLockWallpaper" Content="Display the background on lock screen" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your current background photo on your device's lock screen as background wallpaper." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <!-- Detailed Status Settings -->
+                                        <TextBlock Text="Detailed Status Settings" Margin="0,10,0,0" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsLockCalendar" Content="Display calendar event on lock screen" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your first upcoming calendar event on the lock screen as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsLockCountdown" Content="Display countdown on lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the last added countdown event as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsLockWeekNumber" Content="Display week number on lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the current week number on the lock screen as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsLockWeather" Content="Display current weather on lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the current weather on the lock screen as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsLockWeatherDetailed" Content="Display detailed weather on lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display extra weather information on the lock screen as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsLockLocation" Content="Display current location on lock screen"  Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your current location obtained from the weather updates on the lock screen as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsLockAlarm" Content="Display timer status on lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display an alarm clock icon or text line when a TimeMe timer alarm is currently active as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <CheckBox Name="cb_SettingsLockscreenNoteText" Content="Add custom text to lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will add a custom set line of text on the lock screen as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <StackPanel Name="tab_SettingsLockscreenNoteTextString" Visibility="Collapsed">
+                                            <TextBlock Text="Please enter your custom text line:" Style="{StaticResource TextBlockBlack}"/>
+                                            <TextBox Name="txtbox_SettingsLockscreenNoteTextString" Width="250" Style="{StaticResource TextBox}" IsSpellCheckEnabled="False"/>
+                                        </StackPanel>
+
+                                        <CheckBox Name="cb_SettingsLockNetwork" Content="Display network name on lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your currently connected network name as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsLockBatteryDetailed" Content="Display battery level on lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your current battery level as detailed status." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <CheckBox Name="cb_SettingsLockEnter" Content="Split info with enter on lock screen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will split your lock screen information with enters in between." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <!-- Quick Status Settings -->
+                                        <TextBlock Text="Quick Status Settings" Margin="0,10,0,0" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsLockBattery" Content="Display battery level on lock screen" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your current battery level as a quick status icon which shows the current battery level in percentage." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <TextBlock Text="* To actually see the lock screen information you will need to set TimeMe as your detailed and quick status lock screen application in your Windows settings." Margin="0,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open device Lock screen Settings" Margin="0,10,0,0" Click="SettingsOpenLockscreenSettings_Click"/>
+                                    </StackPanel>
+
+                                    <!-- Notification Settings -->
+                                    <StackPanel Name="Set_Notification" Margin="0,0,10,0" Visibility="Collapsed">
+                                        <TextBlock Text="Notification Settings" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsNotiWeatherCurrent" Content="Display current weather as notification" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show the current weather as a notification message when the weather gets updated in the background." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiBingDescription" Content="Show Bing description as notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show a notification when the Bing background updates in the background with the daily description." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiBattery" Content="Show battery remaining notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show a notification with the battery level and the estimated remaining battery life time." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiLowBattery" Content="Show low battery warning notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show a notification when the battery level gets below 25% displaying the remaining battery life time." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiCalendarTime" Content="Show calendar event notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show a notification with the first upcoming set calendar event information." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiCountdownTime" Content="Show countdown event notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show a notification with the days remaining till the last added countdown event." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiDayTime" Content="Show remaining day time notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show a notification with the remaining time on the current day and progress in percentage." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiWeekNumber" Content="Show week number as notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show a notification with the current week number that will only appear on the first day of the week." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiNetworkChange" Content="Show network change as notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show a notification when your connected network has been changed." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsNotiBatterySaver" Content="Show battery saver as notification" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Name="txt_SettingsNotiBatterySaver" Text="Enabling this will show a notification when the application is not set to always allowed in the background battery saver." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <TextBlock Text="Select a notification popup style:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following notification style will be used to display the notifications on your device." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="cb_SettingsNotiStyle" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="No popup and sound"/>
+                                            <ComboBoxItem Content="Popup with no sound"/>
+                                            <ComboBoxItem Content="Popup with sound alert"/>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <!-- Sleep and Flash Screen -->
+                                    <StackPanel Name="Set_SleepFlash" Margin="0,0,10,0" Visibility="Collapsed">
+                                        <TextBlock Text="Sleep and Flash Settings" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsScreenDoubleTapStart" Content="Double tap on the screen to close app" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will close the application when double tapping on the screen instead of returning to the application's tile page while being on the sleeping or flashlight screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsScreenBackButton" Content="Disable device's back button in screens" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this option will disable the back button on your device to prevent from accidently closing the opened screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <TextBlock Text="Sleeping Screen Settings" Margin="0,15,0,0" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsSleepAnalogClock" Content="Display analog clock on sleepscreen" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display an analog clock instead of a digital clock on the sleep screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsSleepDate" Content="Display current date on sleepscreen" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the current date on the sleep screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsSleepWeather" Content="Display current weather on sleepscreen" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the current weather information on the sleep screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsSleepBattery" Content="Display battery level on sleepscreen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display your current battery level on the Sleeping Screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsSleepAlarm" Content="Display timer status on sleepscreen" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display an alarm clock icon when a TimeMe timer alarm is currently active on the Sleeping Screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingsScreenWallpaper" Margin="0,10,0,0" Content="Display background on sleepscreen" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show the current background wallpaper on the Sleeping Screen to liven things up on your device's screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <TextBlock Text="Sleeping screen display orientation:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will be used as your device's screen orientation when opened to prevent accidental rotation." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingScreenOrientation" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}"/>
+                                        <TextBlock Text="Please select an analog clock style:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will be used as your analog clock style on the sleeping screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingSleepAnalogClockStyle" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}" ItemTemplate="{StaticResource ComboBoxImageItem}"/>
+                                        <TextBlock Text="Flashlight Settings" Margin="0,15,0,0" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <CheckBox Name="cb_SettingsFlashCameraOutput" Content="Display device camera output" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the camera output on the flashlight screen when available." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <TextBlock Text="* You can create a NFC tag for the Sleeping Screen and Flashlight on the 'Write new NFC Tags' settings tab." Margin="0,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                    </StackPanel>
+
+                                    <!-- Write new NFC Tags -->
+                                    <StackPanel Name="Set_NFCTags" Margin="0,0,10,0" Visibility="Collapsed">
+                                        <TextBlock Text="Write new NFC Tags" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <TextBlock Text="When you write a NFC tag you can use NFC to directly open a certain application feature when you make contact with the NFC tag on the device's NFC area." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <Button Name="btn_SettingsWriteNFCTag_Slp" Tag="Slp" Margin="-2,10,0,0" Style="{StaticResource ButtonAccent}" Content="Write Sleeping Screen NFC Tag" Click="SettingsWriteNFCTag_Click"/>
+                                        <Button Name="btn_SettingsWriteNFCTag_Fls" Tag="Fls" Margin="-2,10,0,0" Style="{StaticResource ButtonAccent}" Content="Write Flashlight NFC Tag" Click="SettingsWriteNFCTag_Click"/>
+                                    </StackPanel>
+
+                                    <!-- Other Settings -->
+                                    <StackPanel Name="Set_Other" Margin="0,0,10,0" Visibility="Collapsed">
+                                        <TextBlock Text="Startup Settings" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <TextBlock Text="Opening feature on application startup:" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will be opened when you launch TimeMe from the pinned main live tile or from the application list." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingStartupTab" Width="255" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="Live Tile Page"/>
+                                            <ComboBoxItem Content="Weather Page"/>
+                                            <ComboBoxItem Content="Stopwatch Page"/>
+                                            <ComboBoxItem Content="Timer Page"/>
+                                            <ComboBoxItem Content="World Page"/>
+                                            <ComboBoxItem Content="Settings Page"/>
+                                            <ComboBoxItem Content="Sleeping Screen"/>
+                                            <ComboBoxItem Content="Flashlight Screen"/>
+                                            <ComboBoxItem Content="Countdown Page"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="Device Settings" Margin="0,15,0,0" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open Wi-Fi Network Settings" Click="SettingsOpenWiFiSettings_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open NFC / Proximity Settings" Margin="0,10,0,0" Click="SettingsOpenNFCSettings_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open Background Apps Settings" Margin="0,10,0,0" Click="SettingsOpenBackgroundAppsSettings_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open Start screen Settings" Margin="0,10,0,0" Click="SettingsOpenStartscreenSettings_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open Lock screen Settings" Margin="0,10,0,0" Click="SettingsOpenLockscreenSettings_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open Calendar Settings" Margin="0,10,0,0" Click="SettingsOpenCalendarSettings_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open Location Settings" Margin="0,10,0,0" Click="SettingsOpenLocationSettings_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open Battery Settings" Margin="0,10,0,0" Click="SettingsOpenBatterySettings_Click"/>
+
+                                        <TextBlock Text="Debug Settings" Margin="0,15,0,0" Style="{StaticResource TextBlockPageTitleBlack}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Background Task Status:" Margin="0,0,5,0" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_bgTimeMeTaskUser" Text="No" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_bgTimeMeTaskTimer" Text="No" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_bgTimeMeTaskTimeZone" Text="No" Style="{StaticResource TextBlockLightGray}"/>
+                                        </StackPanel>
+                                        <CheckBox Name="cb_SettingsAppDebug" Content="Enable application debugging" Style="{StaticResource CheckBox}"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Reset TimeMe Status and All Files" Click="btn_ResetTimeMeStatus_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Test Cortana TimeMe voice speech" Click="btn_TestCortanaVoiceSpeech_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Margin="0,10,0,0" Content="Show the last set debug message" Click="ShowDebugMessage_Click"/>
+
+                                        <TextBlock Text="Miscellaneous" Style="{StaticResource TextBlockPageTitleBlack}" Margin="0,15,0,0"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Visit Project Website" Click="SettingsOpenProjectWebsite_Click"/>
+                                        <Button Style="{StaticResource ButtonAccent}" Content="Open Donation Page" Margin="0,10,0,0" Click="SettingsOpenDonationPage_Click"/>
+                                    </StackPanel>
+
+                                    <!-- Live Tile Style and Size Selection -->
+                                    <StackPanel Name="Set_LiveSizeStyle" Visibility="Collapsed">
+                                        <TextBlock Text="Please select a time live tile size and style:" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="Light Live Tiles" FontSize="30" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="Note: Light time live tiles have no font family and no font color customization support." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="MediumIcon" Tag="Light" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumIcon.gif" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="MediumText" Tag="Light" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumText.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="MediumRoundImage" Tag="Light" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumRoundImage.png" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="MediumAnalogMinimal" Tag="Light" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumAnalogMinimal.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="MediumAnalogRound" Tag="Light" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumAnalogRound.png" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="MediumAnalogCortana" Tag="Light" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumAnalogCortana.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideIcon" Tag="Light" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideIcon.png" Width="280"/>
+                                        </StackPanel>
+
+                                        <TextBlock Text="Heavy Live Tiles" FontSize="30" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="Note: You can set the text you want to be displayed on the 'Text Display Settings' tab." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="Medium" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/Medium.png" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="MediumThree" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumThree.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="MediumOne" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumOne.png" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="MediumTimeOnly" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/MediumTimeOnly.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideText" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideText.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideLite" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideLite.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideBig" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideBig.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideMulti" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideMulti.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideTwo" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideTwo.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideTimeOnly" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideTimeOnly.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideLefty" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideLefty.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WidePhoto" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WidePhoto.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideDate" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideDate.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideNumm" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideNumm.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WideWords" Tapped="lb_ListLiveTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WideWords.gif" Width="280"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!-- Weather Tile Style and Size Selection -->
+                                    <StackPanel Name="Set_WeatherSizeStyle" Visibility="Collapsed">
+                                        <TextBlock Text="Please select a weather tile size and style:" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="Note: Weather live tiles have no font family and no font color customization support." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="WeatherLiteFlip" Tag="Light" Tapped="lb_ListWeatherTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/WeatherLiteFlip.gif" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="WeatherGrey" Tag="Light" Tapped="lb_ListWeatherTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/WeatherGrey.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="WeatherIcon" Tag="Light" Tapped="lb_ListWeatherTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/WeatherIcon.png" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="WeatherSumm" Tag="Light" Tapped="lb_ListWeatherTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/WeatherSumm.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WeatherForecast" Tag="Light" Tapped="lb_ListWeatherTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WeatherForecast.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WeatherCombo" Tag="Light" Tapped="lb_ListWeatherTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WeatherCombo.png" Width="280"/>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="WeatherWords" Tag="Light" Tapped="lb_ListWeatherTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/WeatherWords.png" Width="280"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!-- Battery Tile Style and Size Selection -->
+                                    <StackPanel Name="Set_BatterySizeStyle" Visibility="Collapsed">
+                                        <TextBlock Text="Please select a battery tile size and style:" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="Note: Battery live tiles have no font family and no font color customization support." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="BatteryIcon" Tag="Light" Tapped="lb_ListBatteryTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/BatteryIcon.png" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="BatteryPerc" Tag="Light" Tapped="lb_ListBatteryTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/BatteryPerc.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="BatteryTextLeft" Tag="Light" Tapped="lb_ListBatteryTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/BatteryTextLeft.png" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="BatteryText" Tag="Light" Tapped="lb_ListBatteryTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/BatteryText.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                            <StackPanel Margin="0,0,10,0" Name="BatteryTextVertTop" Tag="Light" Tapped="lb_ListBatteryTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/BatteryTextVertTop.png" Width="135"/>
+                                            </StackPanel>
+                                            <StackPanel Name="BatteryTextVert" Tag="Light" Tapped="lb_ListBatteryTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                                                <Image Source="Assets/Preview/BatteryTextVert.png" Width="135"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Margin="0,10,0,0" Name="BatterySumm" Tag="Light" Tapped="lb_ListBatteryTileStyle_Tapped" Background="{StaticResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left">
+                                            <Image Source="Assets/Preview/BatterySumm.png" Width="280"/>
+                                        </StackPanel>
+
+                                        <TextBlock Text="* The battery level and remaining time is not always completely accurate because the live tile only updates about every 15 minutes." Margin="0,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+                                    </StackPanel>
+
+                                    <!-- Live tile Font Family -->
+                                    <StackPanel Name="Set_FontFamily" Visibility="Collapsed">
+                                        <CheckBox Name="cb_SettingShowMoreTiles" Content="Is option 'Show More Tiles' enabled?" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will adapt the tile font size so that it will match other live tiles when you have enabled the option to reduce the tile sizes on your Windows start screen." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <TextBlock Text="Select a live tile font display weight:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will be used as the font's display weight on the live tiles, please note that not all the fonts support weight." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingLiveTileFontWeight" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="Light"/>
+                                            <ComboBoxItem Content="Regular"/>
+                                            <ComboBoxItem Content="Semibold"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="Change the live font font display size with:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <TextBlock Text="The following selection will change the font's display size on the live tiles, please make sure you don't set the font size so big to keep the text from getting cutting off." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <ComboBox Name="lp_SettingLiveTileFontSize" Width="250" HorizontalAlignment="Left" Style="{StaticResource ComboBox}">
+                                            <ComboBoxItem Content="-5"/>
+                                            <ComboBoxItem Content="-4"/>
+                                            <ComboBoxItem Content="-3"/>
+                                            <ComboBoxItem Content="-2"/>
+                                            <ComboBoxItem Content="-1"/>
+                                            <ComboBoxItem Content="0"/>
+                                            <ComboBoxItem Content="+1"/>
+                                            <ComboBoxItem Content="+2"/>
+                                            <ComboBoxItem Content="+3"/>
+                                            <ComboBoxItem Content="+4"/>
+                                            <ComboBoxItem Content="+5"/>
+                                            <ComboBoxItem Content="+6"/>
+                                            <ComboBoxItem Content="+7"/>
+                                            <ComboBoxItem Content="+8"/>
+                                            <ComboBoxItem Content="+9"/>
+                                            <ComboBoxItem Content="+10"/>
+                                            <ComboBoxItem Content="+11"/>
+                                            <ComboBoxItem Content="+12"/>
+                                            <ComboBoxItem Content="+13"/>
+                                            <ComboBoxItem Content="+14"/>
+                                            <ComboBoxItem Content="+15"/>
+                                            <ComboBoxItem Content="+16"/>
+                                            <ComboBoxItem Content="+17"/>
+                                            <ComboBoxItem Content="+18"/>
+                                            <ComboBoxItem Content="+19"/>
+                                            <ComboBoxItem Content="+20"/>
+                                            <ComboBoxItem Content="+21"/>
+                                            <ComboBoxItem Content="+22"/>
+                                            <ComboBoxItem Content="+23"/>
+                                            <ComboBoxItem Content="+24"/>
+                                            <ComboBoxItem Content="+25"/>
+                                        </ComboBox>
+
+                                        <CheckBox Name="cb_SettingsDisplayHourBold" Content="Display the hour in bolder font weight" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the time's hour in a bolder weight while the minute will still be displayed in a smaller display font weight." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <TextBlock Text="* Some fonts may require regular weight." TextWrapping="Wrap" Style="{StaticResource TextBlockAccent}"/>
+
+                                        <CheckBox Name="cb_SettingsDisplayAMPMFont" Content="Display AM or PM in matching font" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will display the AM or PM text as the same font as the clock on the live tile and other application features that display the current time." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <TextBlock Text="Please select a live tile font family:" Margin="0,15,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <StackPanel Name="Segoe" Tag="Segoe UI" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Segoe UI" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Segoe" Text="12:34" FontFamily="Segoe UI" FontWeight="Light" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Gothic720" Tag="/Assets/Fonts/Gothic720-Light.ttf#Gothic720 Lt BT" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Gothic720" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Gothic720" Text="12:34" FontFamily="/Assets/Fonts/Gothic720-Light.ttf#Gothic720 Lt BT" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="HelveticaNeue" Tag="/Assets/Fonts/HelveticaNeue-UltraLight.ttf#Helvetica Neue" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Helvetica Neue" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_HelveticaNeue" Text="12:34" FontFamily="/Assets/Fonts/HelveticaNeue-UltraLight.ttf#Helvetica Neue" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Existence" Tag="/Assets/Fonts/Existence-Light.ttf#Existence" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Existence" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Existence" Text="12:34" FontFamily="/Assets/Fonts/Existence-Light.ttf#Existence" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="OneDay" Tag="/Assets/Fonts/OneDay-Light.ttf#ONE DAY" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="OneDay" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_OneDay" Text="12:34" FontFamily="/Assets/Fonts/OneDay-Light.ttf#ONE DAY" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Pier" Tag="/Assets/Fonts/Pier-Regular.ttf#Pier Sans" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Pier" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Pier" Text="12:34" FontFamily="/Assets/Fonts/Pier-Regular.ttf#Pier Sans" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Panama" Tag="/Assets/Fonts/Panama-Light.ttf#Panama" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Panama" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Panama" Text="12:34" FontFamily="/Assets/Fonts/Panama-Light.ttf#Panama" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Bellota" Tag="/Assets/Fonts/Bellota-Light.ttf#Bellota" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Bellota" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Bellota" Text="12:34" FontFamily="/Assets/Fonts/Bellota-Light.ttf#Bellota" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Nooa" Tag="/Assets/Fonts/Nooa-Semiserif.ttf#Nooa Semiserif" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Nooa" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Nooa" Text="12:34" FontFamily="/Assets/Fonts/Nooa-Semiserif.ttf#Nooa Semiserif" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Modeka" Tag="/Assets/Fonts/Modeka-Light.ttf#Modeka" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Modeka" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Modeka" Text="12:34" FontFamily="/Assets/Fonts/Modeka-Light.ttf#Modeka" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Rawengulk" Tag="/Assets/Fonts/Rawengulk-Light.ttf#Rawengulk" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Rawengulk" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Rawengulk" Text="12:34" FontFamily="/Assets/Fonts/Rawengulk-Light.ttf#Rawengulk" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="Dense" Tag="/Assets/Fonts/Dense-Regular.ttf#Dense" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Dense" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_Dense" Text="12:34" FontFamily="/Assets/Fonts/Dense-Regular.ttf#Dense" FontSize="100"/>
+                                        </StackPanel>
+                                        <StackPanel Name="DigitalDisplay" Tag="/Assets/Fonts/DigitalDisplay.ttf#digital display tfb" Tapped="lb_FontList_Tapped" Height="125">
+                                            <TextBlock Text="Digital Display" Margin="0,0,0,-50" Style="{StaticResource TextBlockLightGray}"/>
+                                            <TextBlock Name="txt_DigitalDisplay" Text="12:34" FontFamily="/Assets/Fonts/DigitalDisplay.ttf#digital display tfb" FontSize="100"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!-- Live tile Font Color -->
+                                    <StackPanel Name="Set_FontColor" Visibility="Collapsed">
+                                        <CheckBox Name="cb_SettingLiveTileFontDuoColor" Content="Show live tile text in duo font colors" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will show your live tile text in white and your selected live tile font color, for example your time will be in white and text in your selected font color." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+                                        <CheckBox Name="cb_SettingLiveTileTimeCutOut" Content="Cut out live tile time from background" Margin="0,10,0,0" Style="{StaticResource CheckBox}"/>
+                                        <TextBlock Text="Enabling this will cut out your live tile time text so the time will be transparently cut out from the background photo or color." TextWrapping="Wrap" Style="{StaticResource TextBlockLightGray}"/>
+
+                                        <TextBlock Text="Please select a live tile font color:" Margin="0,10,0,0" Style="{StaticResource TextBlockBlack}"/>
+                                        <GridView Name="lb_FontColorList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+                                            <GridView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4"/>
+                                                </ItemsPanelTemplate>
+                                            </GridView.ItemsPanel>
+                                            <GridView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Rectangle Fill="{Binding Color}" Width="66" Height="66" Tapped="lb_ColorFontList_Tapped"/>
+                                                </DataTemplate>
+                                            </GridView.ItemTemplate>
+                                        </GridView>
+                                    </StackPanel>
+
+                                    <!-- Tile Background Color -->
+                                    <StackPanel Name="Set_BackgroundColor" Visibility="Collapsed">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Please select a tile background color:" Style="{StaticResource TextBlockBlack}"/>
+                                            <Canvas Name="can_BackgroundColor" Width="1" Height="1" Margin="50,0,0,0"/>
+                                        </StackPanel>
+                                        <GridView Name="lb_BackgroundColorList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single">
+                                            <GridView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4"/>
+                                                </ItemsPanelTemplate>
+                                            </GridView.ItemsPanel>
+                                            <GridView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Rectangle Fill="{Binding Color}" Width="66" Height="66" Tapped="lb_ListBackgroundColor_Tapped"/>
+                                                </DataTemplate>
+                                            </GridView.ItemTemplate>
+                                        </GridView>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                        <Image Name="grid_SettingsLogo" Grid.Column="2" MaxWidth="980" Opacity="0.25" Source="Assets/Backgrounds/Settings.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Page Help -->
+            <Grid Name="tab_Help" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Width="315" Margin="5,5,5,5">
+                    <ScrollViewer Style="{StaticResource ScrollViewerVertical}">
+                        <StackPanel>
+                            <StackPanel Name="sp_Help" Margin="0,0,10,0"/>
+                            <StackPanel Margin="0,10,0,0">
+                                <Button Style="{StaticResource ButtonAccent}" Content="Visit Project Website" Margin="0,10,0,0" Click="SettingsOpenProjectWebsite_Click"/>
+                                <Button Style="{StaticResource ButtonAccent}" Content="Open Donation Page" Margin="0,10,0,0" Click="SettingsOpenDonationPage_Click"/>
+                                <Button Style="{StaticResource ButtonAccent}" Content="Open Privacy Policy" Margin="0,10,0,0" Click="SettingsOpenPrivacyPolicy_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+                <Image Name="grid_HelpLogo" Grid.Column="1" MaxWidth="590" Opacity="0.25" Source="Assets/Backgrounds/Help.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

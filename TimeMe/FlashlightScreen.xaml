@@ -1,0 +1,21 @@
+﻿<Page
+    x:Class="TimeMe.FlashlightScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TimeMe"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    DoubleTapped="Page_DoubleTap"
+    Tapped="Page_Tap"
+    ManipulationStarted="Page_ManipulationStarted"
+    ManipulationCompleted="Page_ManipulationCompleted"
+    Background="Black">
+
+    <Grid Background="Black">
+        <Grid Name="grid_Flashlightscreen">
+            <CaptureElement Name="ce_FlashlightBox" Stretch="UniformToFill"/>
+            <Grid Visibility="Collapsed" Name="grid_Flashbackground" Background="White"/>
+        </Grid>
+    </Grid>
+</Page>

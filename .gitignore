@@ -1,0 +1,7 @@
+*.user
+*.pfx
+*.vs
+/TimeMe/obj
+/TimeMe/bin
+/TimeMeTaskAgent/obj
+/TimeMeTaskAgent/bin

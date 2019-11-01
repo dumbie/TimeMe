@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.1">
+  <CommandSet xml:lang="en-US" Name="en-US">
+    <CommandPrefix>Time Me</CommandPrefix>
+    <Example>Launch TimeMe features</Example>
+
+    <Command Name="Flashlight">
+      <Example>TimeMe Flashlight</Example>
+      <ListenFor>flashlight</ListenFor>
+      <Feedback>Opening the TimeMe Flashlight</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="SleepingScreen">
+      <Example>TimeMe SleepingScreen</Example>
+      <ListenFor>sleepingscreen</ListenFor>
+      <Feedback>Opening the TimeMe Sleeping Screen</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="Weather">
+      <Example>TimeMe Weather</Example>
+      <ListenFor>weather</ListenFor>
+      <Feedback>Opening TimeMe Weather Page</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="Countdown">
+      <Example>TimeMe Countdown</Example>
+      <ListenFor>countdown</ListenFor>
+      <Feedback>Opening TimeMe Countdown Page</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="Stopwatch">
+      <Example>TimeMe Stopwatch</Example>
+      <ListenFor>stopwatch</ListenFor>
+      <Feedback>Opening TimeMe Stopwatch Page</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="Timer">
+      <Example>TimeMe Timer</Example>
+      <ListenFor>timer</ListenFor>
+      <Feedback>Opening TimeMe Timer Page</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="World">
+      <Example>TimeMe World</Example>
+      <ListenFor>world</ListenFor>
+      <Feedback>Opening TimeMe World Page</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="Settings">
+      <Example>TimeMe Settings</Example>
+      <ListenFor>settings</ListenFor>
+      <Feedback>Opening TimeMe Settings Page</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="Info">
+      <Example>TimeMe Info</Example>
+      <ListenFor>info</ListenFor>
+      <Feedback>Preparing for my TimeMe Speech</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+
+    <Command Name="Speech">
+      <Example>TimeMe Speech</Example>
+      <ListenFor>speech</ListenFor>
+      <Feedback>Preparing for my TimeMe Speech</Feedback>
+      <Navigate Target="MainPage"/>
+    </Command>
+  </CommandSet>
+</VoiceCommands>

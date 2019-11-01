@@ -1,0 +1,191 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--Universal ComboBox and ListBox-->
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush" Color="#505050"/>
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush" Color="#8A8A8A"/>
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush" Color="#E1E1E1"/>
+
+    <!--Acrylic Backgrounds-->
+    <!--<AcrylicBrush x:Key="AcrylBackgroundHostDark" BackgroundSource="HostBackdrop" TintColor="#1D1D1D" TintOpacity="0.90" FallbackColor="#1D1D1D"/>
+    <AcrylicBrush x:Key="AcrylBackgroundHostLight" BackgroundSource="HostBackdrop" TintColor="#E1E1E1" TintOpacity="0.80" FallbackColor="#E1E1E1"/>
+    <AcrylicBrush x:Key="AcrylBackgroundDark" BackgroundSource="Backdrop" TintColor="#1D1D1D" TintOpacity="0.90" FallbackColor="#1D1D1D"/>
+    <AcrylicBrush x:Key="AcrylBackgroundLight" BackgroundSource="Backdrop" TintColor="#E1E1E1" TintOpacity="0.80" FallbackColor="#E1E1E1"/>-->
+
+    <!--Text Styles-->
+    <Style x:Key="TextBlockPageTitleBlack" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="TextBlockPageTitleWhite" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="TextBlockSettingTitleWhiteNormal" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+
+    <Style x:Key="TextBlockSettingTitleWhiteBold" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+
+    <Style x:Key="TextBlockSettingTitleWhiteLight" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+
+    <Style x:Key="TextBlockBlack" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="Black"/>
+    </Style>
+
+    <Style x:Key="TextBlockWhite" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style x:Key="TextBlockLightGray" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="#888"/>
+    </Style>
+
+    <Style x:Key="TextBlockDarkGray" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="#1D1D1D"/>
+    </Style>
+
+    <Style x:Key="TextBlockAccent" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="{StaticResource SystemControlBackgroundAccentBrush}"/>
+    </Style>
+
+    <!--ComboBox Styles-->
+    <Style x:Key="ComboBox" TargetType="ComboBox">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <!--CheckBox Styles-->
+    <Style x:Key="CheckBox" TargetType="CheckBox">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+    </Style>
+
+    <!--TextBox Styles-->
+    <Style x:Key="TextBox" TargetType="TextBox">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style x:Key="PasswordBox" TargetType="PasswordBox">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+    </Style>
+
+    <!--Button Styles-->
+    <Style x:Key="ButtonAccent" TargetType="Button">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource SystemControlBackgroundAccentBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource SystemControlBackgroundAccentBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+
+    <Style x:Key="ButtonColor" TargetType="Button">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+
+    <!--ListBox Styles-->
+    <Style x:Key="ListBoxVertical" TargetType="ListBox">
+        <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListBoxHorizontal" TargetType="ListBox">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollMode" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="ListBoxStackPanel" TargetType="StackPanel">
+        <Setter Property="Width" Value="90"/>
+        <Setter Property="Height" Value="85"/>
+    </Style>
+
+    <Style x:Key="ListBoxItemNoPadding" TargetType="ListBoxItem">
+        <Setter Property="Padding" Value="0,0,0,0"/>
+    </Style>
+
+    <Style x:Key="ListBoxItemDisabled" TargetType="ListBoxItem">
+        <Setter Property="IsEnabled" Value="False"/>
+    </Style>
+
+    <!--ScrollViewer Styles-->
+    <Style x:Key="ScrollViewer" TargetType="ScrollViewer">
+        <Setter Property="HorizontalScrollMode" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="VerticalScrollMode" Value="Auto"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ZoomMode" Value="Disabled"/>
+    </Style>
+
+    <Style x:Key="ScrollViewerHorizontal" TargetType="ScrollViewer">
+        <Setter Property="HorizontalScrollMode" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="VerticalScrollMode" Value="Disabled"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ZoomMode" Value="Disabled"/>
+    </Style>
+
+    <Style x:Key="ScrollViewerVertical" TargetType="ScrollViewer">
+        <Setter Property="HorizontalScrollMode" Value="Disabled"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="VerticalScrollMode" Value="Auto"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ZoomMode" Value="Disabled"/>
+    </Style>
+</ResourceDictionary>
