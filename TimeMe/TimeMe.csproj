@@ -120,13 +120,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\ArnoldVinkCode\Functions\AVTimeZones.cs">
+    <Compile Include="..\..\ArnoldVinkCode\Shared\Functions\AVTimeZones.cs">
       <Link>ArnoldVinkCode\Functions\AVTimeZones.cs</Link>
     </Compile>
-    <Compile Include="..\..\ArnoldVinkCode\Functions\UWP\AVAnimations.cs">
+    <Compile Include="..\..\ArnoldVinkCode\UWP\Functions\AVAnimations.cs">
       <Link>ArnoldVinkCode\Functions\AVAnimations.cs</Link>
     </Compile>
-    <Compile Include="..\..\ArnoldVinkCode\Functions\UWP\AVFunctions.cs">
+    <Compile Include="..\..\ArnoldVinkCode\UWP\Functions\AVFunctions.cs">
       <Link>ArnoldVinkCode\Functions\AVFunctions.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
