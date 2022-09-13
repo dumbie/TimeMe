@@ -1,7 +1,10 @@
+bin
+obj
+debug
+release
+packages
+*.suo
 *.user
+*.aps
 *.pfx
 *.vs
-/TimeMe/obj
-/TimeMe/bin
-/TimeMeTaskAgent/obj
-/TimeMeTaskAgent/bin
