@@ -84,12 +84,12 @@ namespace TimeMeTaskAgent
                     //Set not available Weather Forecast styles
                     if (setWeatherTileSizeName == "WeatherForecast")
                     {
-                        WeatherTile1 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">N/A</text><image src=\"ms-appx:///Assets/WeatherSquare" + WeatherIconStyle + "/0.png\" hint-removeMargin=\"true\"/><text hint-align=\"center\">N/A</text></subgroup>";
+                        WeatherTile1 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">N/A</text><image src=\"ms-appx:///Assets/WeatherSquare" + WeatherIconStyle + "/1000.png\" hint-removeMargin=\"true\"/><text hint-align=\"center\">N/A</text></subgroup>";
                         WeatherTile2 = WeatherTile1; WeatherTile3 = WeatherTile1; WeatherTile4 = WeatherTile1; WeatherTile5 = WeatherTile1;
                     }
                     else
                     {
-                        WeatherTile1 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx:///Assets/Weather" + WeatherIconStyle + "/0.png\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">N/A</text><text hint-align=\"left\" hint-style=\"captionSubtle\">N/A</text></subgroup>";
+                        WeatherTile1 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx:///Assets/Weather" + WeatherIconStyle + "/1000.png\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">N/A</text><text hint-align=\"left\" hint-style=\"captionSubtle\">N/A</text></subgroup>";
                         WeatherTile2 = WeatherTile1; WeatherTile3 = WeatherTile1; WeatherTile4 = WeatherTile1; WeatherTile5 = WeatherTile1;
                     }
 
@@ -133,7 +133,16 @@ namespace TimeMeTaskAgent
 
                             //Set Weather Icon
                             string WeatherIcon = jsonForecast.daily.weathercode[i].ToString();
-                            string WeatherIconStyle = (bool)vApplicationSettings["DisplayWeatherWhiteIcons"] ? "WeatherWhite" : "Weather";
+                            string WeatherIconStyle = string.Empty;
+                            if (setWeatherTileSizeName == "WeatherForecast")
+                            {
+                                WeatherIconStyle = (bool)vApplicationSettings["DisplayWeatherWhiteIcons"] ? "WeatherSquareWhite" : "WeatherSquare";
+                            }
+                            else
+                            {
+                                WeatherIconStyle = (bool)vApplicationSettings["DisplayWeatherWhiteIcons"] ? "WeatherWhite" : "Weather";
+                            }
+
                             if (!string.IsNullOrEmpty(WeatherIcon))
                             {
                                 if (await AVFunctions.AppFileExists("Assets/" + WeatherIconStyle + "/" + WeatherIcon + ".png"))
@@ -142,12 +151,12 @@ namespace TimeMeTaskAgent
                                 }
                                 else
                                 {
-                                    WeatherIcon = "/Assets/" + WeatherIconStyle + "/0.png";
+                                    WeatherIcon = "/Assets/" + WeatherIconStyle + "/1000.png";
                                 }
                             }
                             else
                             {
-                                WeatherIcon = "/Assets/" + WeatherIconStyle + "/0.png";
+                                WeatherIcon = "/Assets/" + WeatherIconStyle + "/1000.png";
                             }
 
                             //Set Weather Highest Temperature

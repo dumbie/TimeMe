@@ -49,8 +49,14 @@ namespace TimeMeTaskAgent
 
                 //Check if current weather icon is available
                 string WeatherIconFormat = "WeatherSquare" + WeatherIconStyle;
-                if (await AVFunctions.AppFileExists("Assets/" + WeatherIconFormat + "/" + BgStatusWeatherCurrentIcon + ".png")) { WeatherIconCurrent = BgStatusWeatherCurrentIcon; }
-                else { WeatherIconCurrent = "0"; }
+                if (await AVFunctions.AppFileExists("Assets/" + WeatherIconFormat + "/" + BgStatusWeatherCurrentIcon + ".png"))
+                {
+                    WeatherIconCurrent = BgStatusWeatherCurrentIcon;
+                }
+                else
+                {
+                    WeatherIconCurrent = "1000";
+                }
 
                 //Check for active alarms and timers
                 if ((setDisplayAlarm || setLockAlarm) && Toast_UpdateManager.GetScheduledToastNotifications().Any(x => x.DeliveryTime > DateTimeNow)) { TimerAlarmActive = true; }

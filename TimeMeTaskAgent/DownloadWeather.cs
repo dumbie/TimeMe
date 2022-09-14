@@ -34,9 +34,14 @@ namespace TimeMeTaskAgent
                 string apiUrl = "https://api.open-meteo.com/v1/forecast/";
                 string apiLocation = "?latitude=" + DownloadLocationGpsLatitude + "&longitude=" + DownloadLocationGpsLongitude;
                 string apiWeather = "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,windspeed_10m_max,winddirection_10m_dominant&current_weather=true&timezone=auto";
+                string apiUnits = string.Empty;
+                if (setFahrenheitCelsius == 0)
+                {
+                    apiUnits = "&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch";
+                }
 
                 //Download and save weather
-                string WeatherDownloadResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri(apiUrl + apiLocation + apiWeather));
+                string WeatherDownloadResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri(apiUrl + apiLocation + apiWeather + apiUnits));
                 if (!string.IsNullOrEmpty(WeatherDownloadResult))
                 {
                     //Update weather status
@@ -100,7 +105,7 @@ namespace TimeMeTaskAgent
                     }
                     else
                     {
-                        BgStatusWeatherCurrentIcon = "0";
+                        BgStatusWeatherCurrentIcon = "1000";
                         vApplicationSettings["BgStatusWeatherCurrentIcon"] = BgStatusWeatherCurrentIcon;
                     }
 

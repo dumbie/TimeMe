@@ -342,7 +342,7 @@ namespace TimeMe
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrent")) { vApplicationSettings["BgStatusWeatherCurrent"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentText")) { vApplicationSettings["BgStatusWeatherCurrentText"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentTemp")) { vApplicationSettings["BgStatusWeatherCurrentTemp"] = "N/A"; }
-                if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentIcon")) { vApplicationSettings["BgStatusWeatherCurrentIcon"] = "0"; }
+                if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentIcon")) { vApplicationSettings["BgStatusWeatherCurrentIcon"] = "1000"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentWindSpeed")) { vApplicationSettings["BgStatusWeatherCurrentWindSpeed"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentRainChance")) { vApplicationSettings["BgStatusWeatherCurrentRainChance"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentTempLow")) { vApplicationSettings["BgStatusWeatherCurrentTempLow"] = "N/A"; }

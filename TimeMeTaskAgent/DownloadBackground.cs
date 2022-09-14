@@ -22,7 +22,6 @@ namespace TimeMeTaskAgent
                     if (setDownloadWeather && (BgStatusDownloadLocation == "Never" || BgStatusDownloadLocation == "Failed" || BgStatusDownloadWeatherTime == "Never" || BgStatusDownloadWeatherTime == "Failed" || DateTimeNow.Subtract(DateTime.Parse(BgStatusDownloadWeatherTime, vCultureInfoEng)).TotalMinutes >= setBackgroundDownloadIntervalMin))
                     {
                         //Load and set Download variables
-                        if (setFahrenheitCelsius == 1) { DownloadWeatherUnits = "?units=C"; }
                         if (setDisplayRegionLanguage) { DownloadLocationLanguage = vCultureInfoReg.Name; }
 
                         //Start downloading weather information

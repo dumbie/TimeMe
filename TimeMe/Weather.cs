@@ -118,7 +118,7 @@ namespace TimeMe
                 else
                 {
                     //Set Weather Units
-                    string unitsTemperature = "°";
+                    string unitsTemperature = jsonForecast.daily_units.temperature_2m_min;
                     string unitsSpeed = jsonForecast.daily_units.windspeed_10m_max;
                     string unitsPrecipitation = jsonForecast.daily_units.precipitation_sum;
 
@@ -162,12 +162,12 @@ namespace TimeMe
                         }
                         else
                         {
-                            img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/0.png", UriKind.Absolute) };
+                            img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/1000.png", UriKind.Absolute) };
                         }
                     }
                     else
                     {
-                        img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/0.png", UriKind.Absolute) };
+                        img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/1000.png", UriKind.Absolute) };
                     }
 
                     //Set Weather Condition
@@ -324,7 +324,7 @@ namespace TimeMe
                 else
                 {
                     //Set Weather Units
-                    string unitsTemperature = "°";
+                    string unitsTemperature = jsonForecast.daily_units.temperature_2m_min;
                     string unitsSpeed = jsonForecast.daily_units.windspeed_10m_max;
                     string unitsPrecipitation = jsonForecast.daily_units.precipitation_sum;
 
@@ -386,12 +386,12 @@ namespace TimeMe
                         }
                         else
                         {
-                            img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/0.png", UriKind.Absolute) };
+                            img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/1000.png", UriKind.Absolute) };
                         }
                     }
                     else
                     {
-                        img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/0.png", UriKind.Absolute) };
+                        img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/1000.png", UriKind.Absolute) };
                     }
 
                     //Set Weather Condition
@@ -559,12 +559,12 @@ namespace TimeMe
                             }
                             else
                             {
-                                WeatherIcon = "/Assets/" + WeatherIconStyle + "/0.png";
+                                WeatherIcon = "/Assets/" + WeatherIconStyle + "/1000.png";
                             }
                         }
                         else
                         {
-                            WeatherIcon = "/Assets/" + WeatherIconStyle + "/0.png";
+                            WeatherIcon = "/Assets/" + WeatherIconStyle + "/1000.png";
                         }
 
                         //Set Weather Highest Temperature

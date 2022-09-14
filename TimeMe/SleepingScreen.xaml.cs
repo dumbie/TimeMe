@@ -256,8 +256,14 @@ namespace TimeMe
                     string WeatherCurrentTemp = vApplicationSettings["BgStatusWeatherCurrentTemp"].ToString();
 
                     string WeatherIconUri = String.Empty;
-                    if (await AVFunctions.AppFileExists("Assets/" + WeatherIconStyle + "/" + WeatherCurrentIcon + ".png")) { WeatherIconUri = "ms-appx:///Assets/" + WeatherIconStyle + "/" + WeatherCurrentIcon + ".png"; }
-                    else { WeatherIconUri = "ms-appx:///Assets/" + WeatherIconStyle + "/0.png"; }
+                    if (await AVFunctions.AppFileExists("Assets/" + WeatherIconStyle + "/" + WeatherCurrentIcon + ".png"))
+                    {
+                        WeatherIconUri = "ms-appx:///Assets/" + WeatherIconStyle + "/" + WeatherCurrentIcon + ".png";
+                    }
+                    else
+                    {
+                        WeatherIconUri = "ms-appx:///Assets/" + WeatherIconStyle + "/1000.png";
+                    }
 
                     if (((BitmapImage)img_WeatherIcon.Source).UriSource.ToString() != WeatherIconUri) { img_WeatherIcon.Source = new BitmapImage() { UriSource = new Uri(WeatherIconUri, UriKind.Absolute) }; }
                     if (txt_WeatherIcon.Text != WeatherCurrentTemp) { AVAnimations.Ani_TextFadeInandOut(txt_WeatherIcon, WeatherCurrentTemp); }

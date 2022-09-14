@@ -91,7 +91,7 @@ namespace TimeMeTaskAgent
         string BgStatusWeatherCurrent = "N/A";
         string BgStatusWeatherCurrentText = "N/A";
         string BgStatusWeatherCurrentTemp = "N/A";
-        string BgStatusWeatherCurrentIcon = "0";
+        string BgStatusWeatherCurrentIcon = "1000";
         string BgStatusWeatherCurrentWindSpeed = "N/A";
         string BgStatusWeatherCurrentRainChance = "N/A";
         string BgStatusWeatherCurrentTempLow = "N/A";
