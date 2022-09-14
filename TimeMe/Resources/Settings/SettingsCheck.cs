@@ -347,12 +347,10 @@ namespace TimeMe
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentRainChance")) { vApplicationSettings["BgStatusWeatherCurrentRainChance"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentTempLow")) { vApplicationSettings["BgStatusWeatherCurrentTempLow"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentTempHigh")) { vApplicationSettings["BgStatusWeatherCurrentTempHigh"] = "N/A"; }
-                if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentLocation")) { vApplicationSettings["BgStatusWeatherCurrentLocation"] = "N/A"; }
-                if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentLocationGps")) { vApplicationSettings["BgStatusWeatherCurrentLocationGps"] = "N/A"; }
+                if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentLocationShort")) { vApplicationSettings["BgStatusWeatherCurrentLocationShort"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherCurrentLocationFull")) { vApplicationSettings["BgStatusWeatherCurrentLocationFull"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusWeatherProvider")) { vApplicationSettings["BgStatusWeatherProvider"] = "N/A"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusBingDescription")) { vApplicationSettings["BgStatusBingDescription"] = "Never"; }
-                if (!vApplicationSettings.ContainsKey("BgStatusDownloadWeather")) { vApplicationSettings["BgStatusDownloadWeather"] = "Never"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusDownloadWeatherTime")) { vApplicationSettings["BgStatusDownloadWeatherTime"] = "Never"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusDownloadLocation")) { vApplicationSettings["BgStatusDownloadLocation"] = "Never"; }
                 if (!vApplicationSettings.ContainsKey("BgStatusDownloadBing")) { vApplicationSettings["BgStatusDownloadBing"] = "Never"; }

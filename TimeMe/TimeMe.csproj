@@ -18,8 +18,9 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>TimeMe_StoreKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>81A63C4489800C122FDFC4722FC255113295CEE7</PackageCertificateThumbprint>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <PackageCertificateThumbprint>
+    </PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxPackageDir>e:\Desktop\TimeMe</AppxPackageDir>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <AppxBundle>Never</AppxBundle>
@@ -27,6 +28,9 @@
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -114,21 +118,16 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\TimeMeShared\TimeMeShared.csproj">
+      <Project>{0a6d2a4c-e28b-4b60-80f5-b77bdaf6d123}</Project>
+      <Name>TimeMeShared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TimeMeTaskAgent\TimeMeTaskAgent.csproj">
       <Project>{e24a3960-cf4d-48cf-91fa-7590d26c925f}</Project>
       <Name>TimeMeTaskAgent</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\ArnoldVinkCode\Shared\Functions\AVTimeZones.cs">
-      <Link>ArnoldVinkCode\Functions\AVTimeZones.cs</Link>
-    </Compile>
-    <Compile Include="..\..\ArnoldVinkCode\UWP\Functions\AVAnimations.cs">
-      <Link>ArnoldVinkCode\Functions\AVAnimations.cs</Link>
-    </Compile>
-    <Compile Include="..\..\ArnoldVinkCode\UWP\Functions\AVFunctions.cs">
-      <Link>ArnoldVinkCode\Functions\AVFunctions.cs</Link>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -2708,9 +2707,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Preview\WeatherLiteFlip.gif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Preview\WeatherWords.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Preview\WeatherIcon.png">
@@ -7681,7 +7677,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.9</Version>
+      <Version>6.2.14</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>

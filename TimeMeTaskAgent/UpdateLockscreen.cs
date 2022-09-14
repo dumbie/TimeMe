@@ -73,7 +73,7 @@ namespace TimeMeTaskAgent
                 //Load lockscreen location
                 if (setBackgroundDownload && setDownloadWeather && setLockLocation)
                 {
-                    string LockLocation = BgStatusWeatherCurrentLocation;
+                    string LockLocation = BgStatusWeatherCurrentLocationShort;
                     if (LockLocation.Length < 7) { LockLocation = "Near town " + LockLocation; }
                     else if (LockLocation.Length < 15) { LockLocation = "Near " + LockLocation; }
 

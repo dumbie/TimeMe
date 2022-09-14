@@ -115,30 +115,31 @@ namespace TimeMeTaskAgent
                 //Load countdown event information
                 if (TextPositionUsed(Setting_TextPositions.Countdown) || setLockCountdown || setNotiCountdownTime)
                 {
-                    //Load first countdown event from XML
+                    //Load countdown events from XML
+                    XDocument countdownXML = null;
                     using (Stream OpenStreamForReadAsync = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync("TimeMeCountdown.xml"))
                     {
-                        XDocument XDocument = XDocument.Load(OpenStreamForReadAsync);
-                        OpenStreamForReadAsync.Dispose();
+                        countdownXML = XDocument.Load(OpenStreamForReadAsync);
+                    }
 
-                        IEnumerable<XElement> XmlCountdownEvents = XDocument.Descendants("TimeMeCountdown").Elements("Count");
-                        if (XmlCountdownEvents.Any())
-                        {
-                            XElement FirstEvent = XmlCountdownEvents.Last();
-                            DateTime LoadedDate = DateTime.Parse(FirstEvent.Attribute("CountDate").Value);
+                    //Get first countdown event
+                    IEnumerable<XElement> XmlCountdownEvents = countdownXML.Descendants("TimeMeCountdown").Elements("Count");
+                    if (XmlCountdownEvents.Any())
+                    {
+                        XElement FirstEvent = XmlCountdownEvents.Last();
+                        DateTime LoadedDate = DateTime.Parse(FirstEvent.Attribute("CountDate").Value);
 
-                            //Datetime to string
-                            string ConvertedDate = "";
-                            if ((bool)vApplicationSettings["DisplayRegionLanguage"]) { ConvertedDate = AVFunctions.ToTitleCase(LoadedDate.Date.ToString("d MMMM yyyy", vCultureInfoReg)); }
-                            else { ConvertedDate = LoadedDate.Date.ToString("d MMMM yyyy", vCultureInfoEng); }
+                        //Datetime to string
+                        string ConvertedDate = "";
+                        if ((bool)vApplicationSettings["DisplayRegionLanguage"]) { ConvertedDate = AVFunctions.ToTitleCase(LoadedDate.Date.ToString("d MMMM yyyy", vCultureInfoReg)); }
+                        else { ConvertedDate = LoadedDate.Date.ToString("d MMMM yyyy", vCultureInfoEng); }
 
-                            //Calculate the days left
-                            CountdownEventDate = (LoadedDate.Date.Subtract(DateTimeNow.Date).Days).ToString();
-                            if (CountdownEventDate == "0") { CountdownEventDate = "today"; }
+                        //Calculate the days left
+                        CountdownEventDate = (LoadedDate.Date.Subtract(DateTimeNow.Date).Days).ToString();
+                        if (CountdownEventDate == "0") { CountdownEventDate = "today"; }
 
-                            //Set the countdown name
-                            CountdownEventName = FirstEvent.Attribute("CountName").Value;
-                        }
+                        //Set the countdown name
+                        CountdownEventName = FirstEvent.Attribute("CountName").Value;
                     }
 
                     //Notification - Countdown Time
@@ -146,7 +147,10 @@ namespace TimeMeTaskAgent
                 }
                 return true;
             }
-            catch { return false; }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

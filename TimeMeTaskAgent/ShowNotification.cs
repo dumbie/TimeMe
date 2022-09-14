@@ -19,7 +19,7 @@ namespace TimeMeTaskAgent
                     string NotiRainChance = BgStatusWeatherCurrentRainChance + " chance of rain";
                     string NotiWindSpeed = "\n" + BgStatusWeatherCurrentWindSpeed + " windspeed";
 
-                    string NotiLocation = BgStatusWeatherCurrentLocation;
+                    string NotiLocation = BgStatusWeatherCurrentLocationShort;
                     if (NotiLocation.Length < 7) { NotiLocation = "\nNear town " + NotiLocation; }
                     else if (NotiLocation.Length < 15) { NotiLocation = "\nNear " + NotiLocation; }
 

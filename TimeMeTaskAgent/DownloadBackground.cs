@@ -19,11 +19,11 @@ namespace TimeMeTaskAgent
                 if (setBackgroundDownload)
                 {
                     if (setDownloadBingWallpaper && (BgStatusDownloadBing == "Never" || DateTimeNow.Subtract(DateTime.Parse(BgStatusDownloadBing, vCultureInfoEng)).TotalMinutes >= setBackgroundDownloadIntervalMin)) { await DownloadBingWallpaper(); }
-                    if (setDownloadWeather && (BgStatusDownloadLocation == "Never" || BgStatusDownloadLocation == "Failed" || BgStatusDownloadWeather == "Never" || BgStatusDownloadWeather == "Failed" || DateTimeNow.Subtract(DateTime.Parse(BgStatusDownloadWeather, vCultureInfoEng)).TotalMinutes >= setBackgroundDownloadIntervalMin))
+                    if (setDownloadWeather && (BgStatusDownloadLocation == "Never" || BgStatusDownloadLocation == "Failed" || BgStatusDownloadWeatherTime == "Never" || BgStatusDownloadWeatherTime == "Failed" || DateTimeNow.Subtract(DateTime.Parse(BgStatusDownloadWeatherTime, vCultureInfoEng)).TotalMinutes >= setBackgroundDownloadIntervalMin))
                     {
                         //Load and set Download variables
                         if (setFahrenheitCelsius == 1) { DownloadWeatherUnits = "?units=C"; }
-                        if (setDisplayRegionLanguage) { DownloadWeatherLanguage = vCultureInfoReg.Name; }
+                        if (setDisplayRegionLanguage) { DownloadLocationLanguage = vCultureInfoReg.Name; }
 
                         //Start downloading weather information
                         bool LocationResult = await DownloadLocation();

@@ -96,11 +96,10 @@ namespace TimeMeTaskAgent
         string BgStatusWeatherCurrentRainChance = "N/A";
         string BgStatusWeatherCurrentTempLow = "N/A";
         string BgStatusWeatherCurrentTempHigh = "N/A";
-        string BgStatusWeatherCurrentLocation = "N/A";
+        string BgStatusWeatherCurrentLocationShort = "N/A";
         string BgStatusWeatherCurrentLocationFull = "N/A";
         string BgStatusWeatherProvider = "N/A";
         string BgStatusBingDescription = "Never";
-        string BgStatusDownloadWeather = "Never";
         string BgStatusDownloadWeatherTime = "Never";
         string BgStatusDownloadLocation = "Never";
         string BgStatusDownloadBing = "Never";
@@ -207,11 +206,10 @@ namespace TimeMeTaskAgent
                 BgStatusWeatherCurrentRainChance = vApplicationSettings["BgStatusWeatherCurrentRainChance"].ToString();
                 BgStatusWeatherCurrentTempLow = vApplicationSettings["BgStatusWeatherCurrentTempLow"].ToString();
                 BgStatusWeatherCurrentTempHigh = vApplicationSettings["BgStatusWeatherCurrentTempHigh"].ToString();
-                BgStatusWeatherCurrentLocation = vApplicationSettings["BgStatusWeatherCurrentLocation"].ToString();
+                BgStatusWeatherCurrentLocationShort = vApplicationSettings["BgStatusWeatherCurrentLocationShort"].ToString();
                 BgStatusWeatherCurrentLocationFull = vApplicationSettings["BgStatusWeatherCurrentLocationFull"].ToString();
                 BgStatusWeatherProvider = vApplicationSettings["BgStatusWeatherProvider"].ToString();
                 BgStatusBingDescription = vApplicationSettings["BgStatusBingDescription"].ToString();
-                BgStatusDownloadWeather = vApplicationSettings["BgStatusDownloadWeather"].ToString();
                 BgStatusDownloadWeatherTime = vApplicationSettings["BgStatusDownloadWeatherTime"].ToString();
                 BgStatusDownloadLocation = vApplicationSettings["BgStatusDownloadLocation"].ToString();
                 BgStatusDownloadBing = vApplicationSettings["BgStatusDownloadBing"].ToString();
@@ -243,15 +241,15 @@ namespace TimeMeTaskAgent
                     BgStatusWeatherCurrentTemp = vApplicationSettings["BgStatusWeatherCurrentTemp"].ToString();
                     if (!BgStatusWeatherCurrentTemp.EndsWith("!")) { BgStatusWeatherCurrentTemp = BgStatusWeatherCurrentTemp + "!"; vApplicationSettings["BgStatusWeatherCurrentTemp"] = BgStatusWeatherCurrentTemp; }
 
-                    BgStatusDownloadWeather = DownloadWeather;
-                    vApplicationSettings["BgStatusDownloadWeather"] = DownloadWeather;
+                    BgStatusDownloadWeatherTime = DownloadWeather;
+                    vApplicationSettings["BgStatusDownloadWeatherTime"] = DownloadWeather;
                 }
 
                 //Always set to Never or DateTime
                 if (!String.IsNullOrEmpty(DownloadLocation))
                 {
-                    BgStatusWeatherCurrentLocation = vApplicationSettings["BgStatusWeatherCurrentLocation"].ToString();
-                    if (!BgStatusWeatherCurrentLocation.EndsWith("!")) { BgStatusWeatherCurrentLocation = BgStatusWeatherCurrentLocation + "!"; vApplicationSettings["BgStatusWeatherCurrentLocation"] = BgStatusWeatherCurrentLocation; }
+                    BgStatusWeatherCurrentLocationShort = vApplicationSettings["BgStatusWeatherCurrentLocationShort"].ToString();
+                    if (!BgStatusWeatherCurrentLocationShort.EndsWith("!")) { BgStatusWeatherCurrentLocationShort = BgStatusWeatherCurrentLocationShort + "!"; vApplicationSettings["BgStatusWeatherCurrentLocationShort"] = BgStatusWeatherCurrentLocationShort; }
 
                     BgStatusWeatherCurrentLocationFull = vApplicationSettings["BgStatusWeatherCurrentLocationFull"].ToString();
                     if (!BgStatusWeatherCurrentLocationFull.EndsWith("!")) { BgStatusWeatherCurrentLocationFull = BgStatusWeatherCurrentLocationFull + "!"; vApplicationSettings["BgStatusWeatherCurrentLocationFull"] = BgStatusWeatherCurrentLocationFull; }

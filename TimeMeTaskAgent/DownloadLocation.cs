@@ -34,21 +34,36 @@ namespace TimeMeTaskAgent
                         Geolocator Geolocator = new Geolocator();
                         Geolocator.DesiredAccuracy = PositionAccuracy.Default;
                         Geoposition ResGeoposition = await Geolocator.GetGeopositionAsync(TimeSpan.FromMinutes(setBackgroundDownloadIntervalMin), TimeSpan.FromSeconds(6));
-                        DownloadWeatherLocation = ResGeoposition.Coordinate.Point.Position.Latitude.ToString().Replace(",", ".") + "," + ResGeoposition.Coordinate.Point.Position.Longitude.ToString().Replace(",", ".");
+                        DownloadLocationGpsLatitude = ResGeoposition.Coordinate.Point.Position.Latitude.ToString().Replace(",", ".");
+                        DownloadLocationGpsLongitude = ResGeoposition.Coordinate.Point.Position.Longitude.ToString().Replace(",", ".");
+                        DownloadLocationGpsCombined = DownloadLocationGpsLatitude + "," + DownloadLocationGpsLongitude;
+                        DownloadLocationTarget = DownloadLocationGpsCombined;
                     }
-                    catch { DownloadGpsUpdateFailed = true; }
+                    catch
+                    {
+                        DownloadLocationGpsFailed = true;
+                    }
                 }
                 else
                 {
-                    if (String.IsNullOrEmpty(setWeatherNonGpsLocation)) { DownloadGpsUpdateFailed = true; }
-                    else { DownloadWeatherLocation = setWeatherNonGpsLocation; }
+                    if (string.IsNullOrEmpty(setWeatherNonGpsLocation))
+                    {
+                        DownloadLocationGpsFailed = true;
+                    }
+                    else
+                    {
+                        DownloadLocationTarget = setWeatherNonGpsLocation;
+                    }
                 }
 
                 //Load and set manual location
-                if (DownloadGpsUpdateFailed)
+                if (DownloadLocationGpsFailed)
                 {
                     string PreviousLocation = BgStatusWeatherCurrentLocationFull.Replace("!", "");
-                    if (PreviousLocation != "N/A" && !String.IsNullOrEmpty(PreviousLocation)) { DownloadWeatherLocation = PreviousLocation; }
+                    if (PreviousLocation != "N/A" && !string.IsNullOrEmpty(PreviousLocation))
+                    {
+                        DownloadLocationTarget = PreviousLocation;
+                    }
                     else
                     {
                         Debug.WriteLine("Failed no previous location has been set.");
@@ -58,7 +73,7 @@ namespace TimeMeTaskAgent
                 }
 
                 //Download and save the weather location
-                string LocationResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri("https://service.weather.microsoft.com/" + DownloadWeatherLanguage + "/locations/search/" + DownloadWeatherLocation + DownloadWeatherUnits));
+                string LocationResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri("https://service.weather.microsoft.com/" + DownloadLocationLanguage + "/locations/search/" + DownloadLocationTarget));
 
                 //Check if there is location data available
                 JObject LocationJObject = JObject.Parse(LocationResult);
@@ -73,10 +88,15 @@ namespace TimeMeTaskAgent
                     JToken HttpJTokenGeo = LocationJObject["responses"][0]["locations"][0];
 
                     //Set current location coords
-                    if (HttpJTokenGeo["coordinates"]["lat"] != null && HttpJTokenGeo["coordinates"]["lon"] != null) { DownloadWeatherLocation = HttpJTokenGeo["coordinates"]["lat"].ToString().Replace(",", ".") + "," + HttpJTokenGeo["coordinates"]["lon"].ToString().Replace(",", "."); }
+                    if (HttpJTokenGeo["coordinates"]["lat"] != null && HttpJTokenGeo["coordinates"]["lon"] != null)
+                    {
+                        DownloadLocationGpsLatitude = HttpJTokenGeo["coordinates"]["lat"].ToString().Replace(",", ".");
+                        DownloadLocationGpsLongitude = HttpJTokenGeo["coordinates"]["lon"].ToString().Replace(",", ".");
+                        DownloadLocationGpsCombined = DownloadLocationGpsLatitude + "," + DownloadLocationGpsLongitude;
+                    }
                     else
                     {
-                        if (!setWeatherGpsLocation || DownloadGpsUpdateFailed)
+                        if (!setWeatherGpsLocation || DownloadLocationGpsFailed)
                         {
                             Debug.WriteLine("Failed no gps coords for location found.");
                             BackgroundStatusUpdateSettings(null, "Failed", null, null, "GpsNoLocationCoords");
@@ -88,14 +108,14 @@ namespace TimeMeTaskAgent
                     if (HttpJTokenGeo["displayName"] != null)
                     {
                         string LocationName = HttpJTokenGeo["displayName"].ToString();
-                        if (!String.IsNullOrEmpty(LocationName))
+                        if (!string.IsNullOrEmpty(LocationName))
                         {
                             BgStatusWeatherCurrentLocationFull = LocationName;
                             vApplicationSettings["BgStatusWeatherCurrentLocationFull"] = BgStatusWeatherCurrentLocationFull;
 
                             if (LocationName.Contains(",")) { LocationName = LocationName.Split(',')[0]; }
-                            BgStatusWeatherCurrentLocation = LocationName;
-                            vApplicationSettings["BgStatusWeatherCurrentLocation"] = BgStatusWeatherCurrentLocation;
+                            BgStatusWeatherCurrentLocationShort = LocationName;
+                            vApplicationSettings["BgStatusWeatherCurrentLocationShort"] = BgStatusWeatherCurrentLocationShort;
                         }
                         else
                         {

@@ -2,6 +2,7 @@
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
   <Publisher>CN=E50820D8-A817-4517-9CD7-9B57976E3736</Publisher>
   <PublisherDisplayName>Arnold Vink</PublisherDisplayName>
+  <DeveloperAccountType>MSA</DeveloperAccountType>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
     <Language Code="af" InMinimumRequirementSet="true" />
@@ -240,6 +241,8 @@
     <Language Code="no-no" InMinimumRequirementSet="true" />
     <Language Code="nso" InMinimumRequirementSet="true" />
     <Language Code="nso-za" InMinimumRequirementSet="true" />
+    <Language Code="om" InMinimumRequirementSet="false" />
+    <Language Code="om-et" InMinimumRequirementSet="false" />
     <Language Code="or" InMinimumRequirementSet="true" />
     <Language Code="or-in" InMinimumRequirementSet="true" />
     <Language Code="pa" InMinimumRequirementSet="true" />
@@ -371,16 +374,11 @@
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
     <MainPackageIdentityName>54655ArnoldVink.CtrlUI</MainPackageIdentityName>
-    <MainPackageIdentityName>54655ArnoldVink.EnigmaTV</MainPackageIdentityName>
     <MainPackageIdentityName>54655ArnoldVink.MediaRemoteMex</MainPackageIdentityName>
     <MainPackageIdentityName>54655ArnoldVink.4344554AB894C</MainPackageIdentityName>
+    <MainPackageIdentityName>54655ArnoldVink.NewsScroll</MainPackageIdentityName>
     <MainPackageIdentityName>54655ArnoldVink.NewsMe</MainPackageIdentityName>
     <MainPackageIdentityName>54655ArnoldVink.6584C4488F1B</MainPackageIdentityName>
-    <MainPackageIdentityName>54655ArnoldVink.SleepAlarm</MainPackageIdentityName>
-    <MainPackageIdentityName>54655ArnoldVink.Sleepie</MainPackageIdentityName>
-    <MainPackageIdentityName>54655ArnoldVink.SleepyRadio</MainPackageIdentityName>
-    <MainPackageIdentityName>54655ArnoldVink.StreamVR</MainPackageIdentityName>
-    <MainPackageIdentityName>54655ArnoldVink.XiaomiBand</MainPackageIdentityName>
     <MainPackageIdentityName>54655ArnoldVink.XS4ALLWebbieRemote</MainPackageIdentityName>
     <MainPackageIdentityName>54655ArnoldVink.XS4ALLWebbieTV</MainPackageIdentityName>
   </AccountPackageIdentityNames>

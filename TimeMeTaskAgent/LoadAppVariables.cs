@@ -105,10 +105,13 @@ namespace TimeMeTaskAgent
         string WeatherLastUpdate = "N/A";
 
         //Download Variables
-        bool DownloadGpsUpdateFailed = false;
-        string DownloadWeatherLocation = "";
         string DownloadWeatherUnits = "?units=F";
-        string DownloadWeatherLanguage = "en-US";
+        bool DownloadLocationGpsFailed = false;
+        string DownloadLocationGpsCombined = string.Empty;
+        string DownloadLocationGpsLatitude = string.Empty;
+        string DownloadLocationGpsLongitude = string.Empty;
+        string DownloadLocationTarget = string.Empty;
+        string DownloadLocationLanguage = "en-US";
 
         //Tile Render Variables
         int TimeHeight1 = 0; int TimeHeight2 = 0; int LiveTilePadding = 0;

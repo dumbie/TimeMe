@@ -90,8 +90,6 @@ namespace TimeMe
                 { WeatherForecast.Background = new SolidColorBrush(Color.FromArgb(255, 80, 80, 80)); }
                 else if (vApplicationSettings["WeatherTileSizeName"].ToString() == "WeatherCombo")
                 { WeatherCombo.Background = new SolidColorBrush(Color.FromArgb(255, 80, 80, 80)); }
-                else if (vApplicationSettings["WeatherTileSizeName"].ToString() == "WeatherWords")
-                { WeatherWords.Background = new SolidColorBrush(Color.FromArgb(255, 80, 80, 80)); }
 
                 //Load - Display Battery Tile Size and Style
                 if (vApplicationSettings["BatteryTileSizeName"].ToString() == "BatteryIcon")

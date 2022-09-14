@@ -22,7 +22,7 @@ namespace TimeMeTaskAgent
                 Debug.WriteLine("Loading data for the first live tile.");
 
                 //Check if the location name is too long
-                BgStatusWeatherCurrentLocation = AVFunctions.StringCut(BgStatusWeatherCurrentLocation, 25, String.Empty);
+                BgStatusWeatherCurrentLocationShort = AVFunctions.StringCut(BgStatusWeatherCurrentLocationShort, 25, String.Empty);
 
                 //Load and set empty time tile texts
                 TextPositionSet(Setting_TextPositions.NoInformation, String.Empty);
@@ -98,13 +98,13 @@ namespace TimeMeTaskAgent
                 if (TextPositionUsed(Setting_TextPositions.WindSpeed) && setBackgroundDownload && setDownloadWeather)
                 { TextPositionSet(Setting_TextPositions.WindSpeed, "≋ " + BgStatusWeatherCurrentWindSpeed); }
 
-                //Set rain chance tile texts
-                if (TextPositionUsed(Setting_TextPositions.RainChance) && setBackgroundDownload && setDownloadWeather)
-                { TextPositionSet(Setting_TextPositions.RainChance, "☂ " + BgStatusWeatherCurrentRainChance); }
+                //Set rain fall tile texts
+                if (TextPositionUsed(Setting_TextPositions.RainFall) && setBackgroundDownload && setDownloadWeather)
+                { TextPositionSet(Setting_TextPositions.RainFall, "☂ " + BgStatusWeatherCurrentRainChance); }
 
                 //Set location tile texts
                 if (TextPositionUsed(Setting_TextPositions.Location) && setBackgroundDownload && setDownloadWeather)
-                { TextPositionSet(Setting_TextPositions.Location, BgStatusWeatherCurrentLocation); }
+                { TextPositionSet(Setting_TextPositions.Location, BgStatusWeatherCurrentLocationShort); }
 
                 //Load light Live Tile Resources
                 if (setLiveTileSizeLight)
@@ -154,7 +154,7 @@ namespace TimeMeTaskAgent
                             else { WordsWeatherInfo = BgStatusWeatherCurrentText.ToLower() + " outside"; }
 
                             //Set Weather Location Text
-                            WordsWeatherLocation = BgStatusWeatherCurrentLocation;
+                            WordsWeatherLocation = BgStatusWeatherCurrentLocationShort;
                             if (WordsWeatherLocation.Length < 7) { WordsWeatherLocation = "near town " + WordsWeatherLocation; }
                             else if (WordsWeatherLocation.Length < 15) { WordsWeatherLocation = "near " + WordsWeatherLocation; }
 

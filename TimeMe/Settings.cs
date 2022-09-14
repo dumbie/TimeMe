@@ -38,14 +38,14 @@ namespace TimeMe
                     string BgStatusWeatherCurrentTemp = vApplicationSettings["BgStatusWeatherCurrentTemp"].ToString();
                     if (!BgStatusWeatherCurrentTemp.EndsWith("!")) { vApplicationSettings["BgStatusWeatherCurrentTemp"] = BgStatusWeatherCurrentTemp + "!"; }
 
-                    vApplicationSettings["BgStatusDownloadWeather"] = DownloadWeather;
+                    vApplicationSettings["BgStatusDownloadWeatherTime"] = DownloadWeather;
                 }
 
                 //Always set to Never or DateTime
                 if (!String.IsNullOrEmpty(DownloadLocation))
                 {
-                    string BgStatusWeatherCurrentLocation = vApplicationSettings["BgStatusWeatherCurrentLocation"].ToString();
-                    if (!BgStatusWeatherCurrentLocation.EndsWith("!")) { vApplicationSettings["BgStatusWeatherCurrentLocation"] = BgStatusWeatherCurrentLocation + "!"; }
+                    string BgStatusWeatherCurrentLocationShort = vApplicationSettings["BgStatusWeatherCurrentLocationShort"].ToString();
+                    if (!BgStatusWeatherCurrentLocationShort.EndsWith("!")) { vApplicationSettings["BgStatusWeatherCurrentLocationShort"] = BgStatusWeatherCurrentLocationShort + "!"; }
 
                     string BgStatusWeatherCurrentLocationFull = vApplicationSettings["BgStatusWeatherCurrentLocationFull"].ToString();
                     if (!BgStatusWeatherCurrentLocationFull.EndsWith("!")) { vApplicationSettings["BgStatusWeatherCurrentLocationFull"] = BgStatusWeatherCurrentLocationFull + "!"; }

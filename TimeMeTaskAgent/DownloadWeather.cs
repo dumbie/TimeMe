@@ -1,20 +1,20 @@
 ﻿using ArnoldVinkCode;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using TimeMeShared.Classes.ApiOpenMeteo;
 
 namespace TimeMeTaskAgent
 {
     partial class ScheduledAgent
     {
-
-        //Download weather and forecast
+        //Download weather information
         async Task DownloadWeather()
         {
             try
             {
-                Debug.WriteLine("Downloading Weather update.");
+                Debug.WriteLine("Downloading weather information.");
 
                 //Check for internet connection
                 if (!DownloadInternetCheck())
@@ -24,51 +24,40 @@ namespace TimeMeTaskAgent
                 }
 
                 //Check if location is available
-                if (String.IsNullOrEmpty(DownloadWeatherLocation))
+                if (string.IsNullOrEmpty(DownloadLocationGpsCombined))
                 {
                     BackgroundStatusUpdateSettings("Never", null, null, null, "NoWeatherLocation");
                     return;
                 }
 
-                //Download and save weather summary
-                string WeatherSummaryResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri("https://service.weather.microsoft.com/" + DownloadWeatherLanguage + "/weather/summary/" + DownloadWeatherLocation + DownloadWeatherUnits));
-                if (!String.IsNullOrEmpty(WeatherSummaryResult))
+                //Set api url and key
+                string apiUrl = "https://api.open-meteo.com/v1/forecast/";
+                string apiLocation = "?latitude=" + DownloadLocationGpsLatitude + "&longitude=" + DownloadLocationGpsLongitude;
+                string apiWeather = "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,windspeed_10m_max,winddirection_10m_dominant&current_weather=true&timezone=auto";
+
+                //Download and save weather
+                string WeatherDownloadResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri(apiUrl + apiLocation + apiWeather));
+                if (!string.IsNullOrEmpty(WeatherDownloadResult))
                 {
-                    //Update weather summary status
-                    UpdateWeatherSummaryStatus(WeatherSummaryResult);
+                    //Update weather status
+                    UpdateWeatherStatus(WeatherDownloadResult);
 
                     //Notification - Current Weather
                     ShowNotiWeatherCurrent();
 
                     //Save weather summary data
-                    await AVFile.SaveText("TimeMeWeatherSummary.js", WeatherSummaryResult);
+                    await AVFile.SaveText("TimeMeWeatherSummary.js", WeatherDownloadResult);
                 }
                 else
                 {
-                    Debug.WriteLine("Failed no weather summary found.");
+                    Debug.WriteLine("Failed no weather found.");
                     BackgroundStatusUpdateSettings("Failed", null, null, null, "NoWeatherSummary");
                     return;
                 }
 
-                //Download and save weather forecast
-                string WeatherForecastResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri("https://service.weather.microsoft.com/" + DownloadWeatherLanguage + "/weather/forecast/daily/" + DownloadWeatherLocation + DownloadWeatherUnits));
-                if (!String.IsNullOrEmpty(WeatherForecastResult))
-                {
-                    //Save weather forecast data
-                    await AVFile.SaveText("TimeMeWeatherForecast.js", WeatherForecastResult);
-                }
-                else
-                {
-                    Debug.WriteLine("Failed no weather forecast found.");
-                    BackgroundStatusUpdateSettings("Failed", null, null, null, "NoWeatherForecast");
-                    return;
-                }
-
                 //Save Weather status
-                BgStatusDownloadWeather = DateTimeNow.ToString(vCultureInfoEng);
-                vApplicationSettings["BgStatusDownloadWeather"] = BgStatusDownloadWeather;
-                BgStatusDownloadWeatherTime = BgStatusDownloadWeather;
-                vApplicationSettings["BgStatusDownloadWeatherTime"] = BgStatusDownloadWeather;
+                BgStatusDownloadWeatherTime = DateTimeNow.ToString(vCultureInfoEng);
+                vApplicationSettings["BgStatusDownloadWeatherTime"] = BgStatusDownloadWeatherTime;
             }
             catch (Exception ex)
             {
@@ -76,143 +65,133 @@ namespace TimeMeTaskAgent
                 BackgroundStatusUpdateSettings("Failed", null, null, null, "CatchDownloadWeather" + ex.Message);
             }
 
-            //Update weather summary status
-            void UpdateWeatherSummaryStatus(string WeatherSummaryResult)
+            //Update weather status
+            void UpdateWeatherStatus(string weatherResult)
             {
                 try
                 {
-                    //Check if there is summary data available
-                    JObject SummaryJObject = JObject.Parse(WeatherSummaryResult);
-                    if (SummaryJObject["responses"][0]["weather"] != null)
+                    Forecast jsonForecast = JsonConvert.DeserializeObject<Forecast>(weatherResult);
+
+                    //Set Weather Provider Information
+                    BgStatusWeatherProvider = "Open Meteo";
+                    vApplicationSettings["BgStatusWeatherProvider"] = BgStatusWeatherProvider;
+
+                    //Set Weather Units
+                    string unitsTemperature = "°";
+                    string unitsSpeed = jsonForecast.daily_units.windspeed_10m_max;
+                    string unitsPrecipitation = jsonForecast.daily_units.precipitation_sum;
+
+                    //Set Weather Information
+                    string Icon = jsonForecast.current_weather.weathercode.ToString();
+                    string Condition = ApiOpenMeteo.WmoCodeToString(jsonForecast.current_weather.weathercode);
+                    string Temperature = jsonForecast.current_weather.temperature.ToString() + unitsTemperature;
+                    string WindSpeed = jsonForecast.current_weather.windspeed.ToString() + unitsSpeed;
+
+                    //Set Weather Forecast Conditions
+                    string RainFall = jsonForecast.daily.precipitation_sum[0].ToString() + unitsPrecipitation;
+                    string TemperatureLow = jsonForecast.daily.temperature_2m_min[0].ToString() + unitsTemperature;
+                    string TemperatureHigh = jsonForecast.daily.temperature_2m_max[0].ToString() + unitsTemperature;
+
+                    //Set Weather Icon
+                    if (!string.IsNullOrEmpty(Icon))
                     {
-                        //Set Weather Provider Information
-                        JToken HttpJTokenProvider = SummaryJObject["responses"][0]["weather"][0]["provider"];
-                        if (HttpJTokenProvider["name"] != null)
-                        {
-                            string Provider = HttpJTokenProvider["name"].ToString();
-                            if (!String.IsNullOrEmpty(Provider)) { BgStatusWeatherProvider = Provider; vApplicationSettings["BgStatusWeatherProvider"] = BgStatusWeatherProvider; }
-                            else { BgStatusWeatherProvider = "N/A"; vApplicationSettings["BgStatusWeatherProvider"] = BgStatusWeatherProvider; }
-                        }
+                        BgStatusWeatherCurrentIcon = Icon;
+                        vApplicationSettings["BgStatusWeatherCurrentIcon"] = BgStatusWeatherCurrentIcon;
+                    }
+                    else
+                    {
+                        BgStatusWeatherCurrentIcon = "0";
+                        vApplicationSettings["BgStatusWeatherCurrentIcon"] = BgStatusWeatherCurrentIcon;
+                    }
 
-                        //Set Weather Current Conditions
-                        string Icon = "";
-                        string Condition = "";
-                        string Temperature = "";
-                        string WindSpeedDirection = "";
-                        JToken UnitsJToken = SummaryJObject["units"];
-                        JToken HttpJTokenCurrent = SummaryJObject["responses"][0]["weather"][0]["current"];
-                        if (HttpJTokenCurrent["icon"] != null) { Icon = HttpJTokenCurrent["icon"].ToString(); }
-                        if (HttpJTokenCurrent["cap"] != null) { Condition = HttpJTokenCurrent["cap"].ToString(); }
-                        if (HttpJTokenCurrent["temp"] != null) { Temperature = HttpJTokenCurrent["temp"].ToString() + "°"; }
-                        if (HttpJTokenCurrent["windSpd"] != null && HttpJTokenCurrent["windDir"] != null) { WindSpeedDirection = HttpJTokenCurrent["windSpd"].ToString() + " " + UnitsJToken["speed"].ToString() + " " + AVFunctions.DegreesToCardinal(Convert.ToDouble((HttpJTokenCurrent["windDir"].ToString()))); }
+                    //Set Weather Temperature and Condition
+                    if (!string.IsNullOrEmpty(Temperature) && !string.IsNullOrEmpty(Condition))
+                    {
+                        BgStatusWeatherCurrent = AVFunctions.ToTitleCase(Condition) + ", " + Temperature;
+                        vApplicationSettings["BgStatusWeatherCurrent"] = BgStatusWeatherCurrent;
+                    }
+                    else
+                    {
+                        BgStatusWeatherCurrent = "N/A";
+                        vApplicationSettings["BgStatusWeatherCurrent"] = BgStatusWeatherCurrent;
+                    }
 
-                        //Set Weather Forecast Conditions
-                        string RainChance = "";
-                        string TemperatureLow = "";
-                        string TemperatureHigh = "";
-                        JToken HttpJTokenForecast = SummaryJObject["responses"][0]["weather"][0]["forecast"]["days"][0];
-                        if (HttpJTokenForecast["precip"] != null) { RainChance = HttpJTokenForecast["precip"].ToString() + "%"; }
-                        if (HttpJTokenForecast["tempLo"] != null) { TemperatureLow = HttpJTokenForecast["tempLo"].ToString() + "°"; }
-                        if (HttpJTokenForecast["tempHi"] != null) { TemperatureHigh = HttpJTokenForecast["tempHi"].ToString() + "°"; }
+                    //Set Weather Temperature
+                    if (!string.IsNullOrEmpty(Temperature))
+                    {
+                        BgStatusWeatherCurrentTemp = Temperature;
+                        vApplicationSettings["BgStatusWeatherCurrentTemp"] = BgStatusWeatherCurrentTemp;
+                    }
+                    else
+                    {
+                        BgStatusWeatherCurrentTemp = "N/A";
+                        vApplicationSettings["BgStatusWeatherCurrentTemp"] = BgStatusWeatherCurrentTemp;
+                    }
 
-                        //Set Weather Icon
-                        if (!String.IsNullOrEmpty(Icon))
-                        {
-                            BgStatusWeatherCurrentIcon = Icon;
-                            vApplicationSettings["BgStatusWeatherCurrentIcon"] = BgStatusWeatherCurrentIcon;
-                        }
-                        else
-                        {
-                            BgStatusWeatherCurrentIcon = "0";
-                            vApplicationSettings["BgStatusWeatherCurrentIcon"] = BgStatusWeatherCurrentIcon;
-                        }
+                    //Set Weather Condition
+                    if (!string.IsNullOrEmpty(Condition))
+                    {
+                        BgStatusWeatherCurrentText = AVFunctions.ToTitleCase(Condition);
+                        vApplicationSettings["BgStatusWeatherCurrentText"] = BgStatusWeatherCurrentText;
+                    }
+                    else
+                    {
+                        BgStatusWeatherCurrentText = "N/A";
+                        vApplicationSettings["BgStatusWeatherCurrentText"] = BgStatusWeatherCurrentText;
+                    }
 
-                        //Set Weather Temperature and Condition
-                        if (!String.IsNullOrEmpty(Temperature) && !String.IsNullOrEmpty(Condition))
-                        {
-                            BgStatusWeatherCurrent = AVFunctions.ToTitleCase(Condition) + ", " + Temperature;
-                            vApplicationSettings["BgStatusWeatherCurrent"] = BgStatusWeatherCurrent;
-                        }
-                        else
-                        {
-                            BgStatusWeatherCurrent = "N/A";
-                            vApplicationSettings["BgStatusWeatherCurrent"] = BgStatusWeatherCurrent;
-                        }
+                    //Set Weather Wind Speed and Direction
+                    if (!string.IsNullOrEmpty(WindSpeed))
+                    {
+                        BgStatusWeatherCurrentWindSpeed = WindSpeed;
+                        vApplicationSettings["BgStatusWeatherCurrentWindSpeed"] = BgStatusWeatherCurrentWindSpeed;
+                    }
+                    else
+                    {
+                        BgStatusWeatherCurrentWindSpeed = "N/A";
+                        vApplicationSettings["BgStatusWeatherCurrentWindSpeed"] = BgStatusWeatherCurrentWindSpeed;
+                    }
 
-                        //Set Weather Temperature
-                        if (!String.IsNullOrEmpty(Temperature))
-                        {
-                            BgStatusWeatherCurrentTemp = Temperature;
-                            vApplicationSettings["BgStatusWeatherCurrentTemp"] = BgStatusWeatherCurrentTemp;
-                        }
-                        else
-                        {
-                            BgStatusWeatherCurrentTemp = "N/A";
-                            vApplicationSettings["BgStatusWeatherCurrentTemp"] = BgStatusWeatherCurrentTemp;
-                        }
+                    //Set Weather Rain Fall
+                    if (!string.IsNullOrEmpty(RainFall))
+                    {
+                        BgStatusWeatherCurrentRainChance = RainFall;
+                        vApplicationSettings["BgStatusWeatherCurrentRainChance"] = BgStatusWeatherCurrentRainChance;
+                    }
+                    else
+                    {
+                        BgStatusWeatherCurrentRainChance = "N/A";
+                        vApplicationSettings["BgStatusWeatherCurrentRainChance"] = BgStatusWeatherCurrentRainChance;
+                    }
 
-                        //Set Weather Condition
-                        if (!String.IsNullOrEmpty(Condition))
-                        {
-                            BgStatusWeatherCurrentText = AVFunctions.ToTitleCase(Condition);
-                            vApplicationSettings["BgStatusWeatherCurrentText"] = BgStatusWeatherCurrentText;
-                        }
-                        else
-                        {
-                            BgStatusWeatherCurrentText = "N/A";
-                            vApplicationSettings["BgStatusWeatherCurrentText"] = BgStatusWeatherCurrentText;
-                        }
+                    //Set Weather Temp Low
+                    if (!string.IsNullOrEmpty(TemperatureLow))
+                    {
+                        BgStatusWeatherCurrentTempLow = TemperatureLow;
+                        vApplicationSettings["BgStatusWeatherCurrentTempLow"] = BgStatusWeatherCurrentTempLow;
+                    }
+                    else
+                    {
+                        BgStatusWeatherCurrentTempLow = "N/A";
+                        vApplicationSettings["BgStatusWeatherCurrentTempLow"] = BgStatusWeatherCurrentTempLow;
+                    }
 
-                        //Set Weather Wind Speed and Direction
-                        if (!String.IsNullOrEmpty(WindSpeedDirection))
-                        {
-                            BgStatusWeatherCurrentWindSpeed = WindSpeedDirection;
-                            vApplicationSettings["BgStatusWeatherCurrentWindSpeed"] = BgStatusWeatherCurrentWindSpeed;
-                        }
-                        else
-                        {
-                            BgStatusWeatherCurrentWindSpeed = "N/A";
-                            vApplicationSettings["BgStatusWeatherCurrentWindSpeed"] = BgStatusWeatherCurrentWindSpeed;
-                        }
-
-                        //Set Weather Rain Chance
-                        if (!String.IsNullOrEmpty(RainChance))
-                        {
-                            BgStatusWeatherCurrentRainChance = RainChance;
-                            vApplicationSettings["BgStatusWeatherCurrentRainChance"] = BgStatusWeatherCurrentRainChance;
-                        }
-                        else
-                        {
-                            BgStatusWeatherCurrentRainChance = "N/A";
-                            vApplicationSettings["BgStatusWeatherCurrentRainChance"] = BgStatusWeatherCurrentRainChance;
-                        }
-
-                        //Set Weather Temp Low
-                        if (!String.IsNullOrEmpty(TemperatureLow))
-                        {
-                            BgStatusWeatherCurrentTempLow = TemperatureLow;
-                            vApplicationSettings["BgStatusWeatherCurrentTempLow"] = BgStatusWeatherCurrentTempLow;
-                        }
-                        else
-                        {
-                            BgStatusWeatherCurrentTempLow = "N/A";
-                            vApplicationSettings["BgStatusWeatherCurrentTempLow"] = BgStatusWeatherCurrentTempLow;
-                        }
-
-                        //Set Weather Temp High
-                        if (!String.IsNullOrEmpty(TemperatureHigh))
-                        {
-                            BgStatusWeatherCurrentTempHigh = TemperatureHigh;
-                            vApplicationSettings["BgStatusWeatherCurrentTempHigh"] = BgStatusWeatherCurrentTempHigh;
-                        }
-                        else
-                        {
-                            BgStatusWeatherCurrentTempHigh = "N/A";
-                            vApplicationSettings["BgStatusWeatherCurrentTempHigh"] = BgStatusWeatherCurrentTempHigh;
-                        }
+                    //Set Weather Temp High
+                    if (!string.IsNullOrEmpty(TemperatureHigh))
+                    {
+                        BgStatusWeatherCurrentTempHigh = TemperatureHigh;
+                        vApplicationSettings["BgStatusWeatherCurrentTempHigh"] = BgStatusWeatherCurrentTempHigh;
+                    }
+                    else
+                    {
+                        BgStatusWeatherCurrentTempHigh = "N/A";
+                        vApplicationSettings["BgStatusWeatherCurrentTempHigh"] = BgStatusWeatherCurrentTempHigh;
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Failed to update weather status: " + ex.Message);
+                }
             }
         }
     }

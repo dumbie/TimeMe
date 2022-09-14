@@ -106,7 +106,7 @@ namespace TimeMeTaskAgent
                             ReplacedTimeString = ReplacedTimeString.Replace("*date*", TextDateMonth);
                             ReplacedTimeString = ReplacedTimeString.Replace("*battery*", TextBatteryLevel);
                             ReplacedTimeString = ReplacedTimeString.Replace("*weather*", BgStatusWeatherCurrent);
-                            ReplacedTimeString = ReplacedTimeString.Replace("*location*", BgStatusWeatherCurrentLocation);
+                            ReplacedTimeString = ReplacedTimeString.Replace("*location*", BgStatusWeatherCurrentLocationShort);
                             ReplacedTimeString = ReplacedTimeString.Replace("*network*", BgStatusNetworkName);
                             TextTimeFull = ReplacedTimeString;
                             TextTimeSplit = ReplacedTimeString;

@@ -175,19 +175,6 @@ namespace TimeMeTaskAgent
                     Tile_UpdateManager.Update(new TileNotification(Tile_XmlContent));
                 }
 
-                //Render forecast words tile
-                else if (setWeatherTileSizeName == "WeatherWords")
-                {
-                    //Set Medium Tile Texts
-                    string WeatherMediumTile = "<binding template=\"TileMedium\">" + TileWeather_BackgroundPhotoXml + "<group><subgroup><text hint-align=\"left\" hint-wrap=\"true\" hint-style=\"caption\">" + WeatherTile1 + "</text></subgroup></group><group><subgroup><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherLastUpdate + "</text><text hint-align=\"left\" hint-style=\"caption\">" + WeatherDetailed + "</text></subgroup></group></binding>";
-
-                    //Set Wide Tile Texts
-                    string WeatherWideTile = "<binding template=\"TileWide\">" + TileWeather_BackgroundPhotoXml + "<group><subgroup><text hint-align=\"left\" hint-wrap=\"true\" hint-style=\"caption\">" + WeatherTile1 + "</text><text hint-align=\"left\" hint-wrap=\"true\" hint-style=\"captionSubtle\">" + WeatherTile2 + "</text></subgroup></group><group><subgroup><text hint-align=\"left\" hint-style=\"caption\">" + WeatherDetailed + "</text></subgroup><subgroup><text hint-align=\"right\" hint-style=\"captionSubtle\">" + WeatherLastUpdate + "</text></subgroup></group></binding>";
-
-                    Tile_XmlContent.LoadXml("<tile><visual contentId=\"" + TileContentId + "\" branding=\"none\">" + WeatherMediumTile + WeatherWideTile + "</visual></tile>");
-                    Tile_UpdateManager.Update(new TileNotification(Tile_XmlContent));
-                }
-
                 Debug.WriteLine("The weather tile has been updated.");
             }
             catch { }
