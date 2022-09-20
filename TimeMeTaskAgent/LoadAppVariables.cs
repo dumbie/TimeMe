@@ -95,7 +95,7 @@ namespace TimeMeTaskAgent
         string CalendarAppoDateTime = "";
         string CalendarAppoEstimated = "";
         string WeatherIconStyle = "";
-        string WeatherIconCurrent = "1000";
+        string WeatherIconCurrent = "0";
         string WeatherTile1 = "N/A";
         string WeatherTile2 = "N/A";
         string WeatherTile3 = "N/A";
@@ -105,12 +105,10 @@ namespace TimeMeTaskAgent
         string WeatherLastUpdate = "N/A";
 
         //Download Variables
-        bool DownloadLocationGpsFailed = false;
-        string DownloadLocationGpsCombined = string.Empty;
-        string DownloadLocationGpsLatitude = string.Empty;
-        string DownloadLocationGpsLongitude = string.Empty;
-        string DownloadLocationTarget = string.Empty;
-        string DownloadLocationLanguage = "en-US";
+        bool DownloadGpsUpdateFailed = false;
+        string DownloadWeatherLocation = "";
+        string DownloadWeatherUnits = "&units=F";
+        string DownloadWeatherLanguage = "en-US";
 
         //Tile Render Variables
         int TimeHeight1 = 0; int TimeHeight2 = 0; int LiveTilePadding = 0;

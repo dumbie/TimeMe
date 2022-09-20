@@ -91,7 +91,7 @@ namespace TimeMeTaskAgent
         string BgStatusWeatherCurrent = "N/A";
         string BgStatusWeatherCurrentText = "N/A";
         string BgStatusWeatherCurrentTemp = "N/A";
-        string BgStatusWeatherCurrentIcon = "1000";
+        string BgStatusWeatherCurrentIcon = "0";
         string BgStatusWeatherCurrentWindSpeed = "N/A";
         string BgStatusWeatherCurrentRainChance = "N/A";
         string BgStatusWeatherCurrentTempLow = "N/A";
@@ -100,6 +100,7 @@ namespace TimeMeTaskAgent
         string BgStatusWeatherCurrentLocationFull = "N/A";
         string BgStatusWeatherProvider = "N/A";
         string BgStatusBingDescription = "Never";
+        string BgStatusDownloadWeather = "Never";
         string BgStatusDownloadWeatherTime = "Never";
         string BgStatusDownloadLocation = "Never";
         string BgStatusDownloadBing = "Never";
@@ -210,6 +211,7 @@ namespace TimeMeTaskAgent
                 BgStatusWeatherCurrentLocationFull = vApplicationSettings["BgStatusWeatherCurrentLocationFull"].ToString();
                 BgStatusWeatherProvider = vApplicationSettings["BgStatusWeatherProvider"].ToString();
                 BgStatusBingDescription = vApplicationSettings["BgStatusBingDescription"].ToString();
+                BgStatusDownloadWeather = vApplicationSettings["BgStatusDownloadWeather"].ToString();
                 BgStatusDownloadWeatherTime = vApplicationSettings["BgStatusDownloadWeatherTime"].ToString();
                 BgStatusDownloadLocation = vApplicationSettings["BgStatusDownloadLocation"].ToString();
                 BgStatusDownloadBing = vApplicationSettings["BgStatusDownloadBing"].ToString();
@@ -241,8 +243,8 @@ namespace TimeMeTaskAgent
                     BgStatusWeatherCurrentTemp = vApplicationSettings["BgStatusWeatherCurrentTemp"].ToString();
                     if (!BgStatusWeatherCurrentTemp.EndsWith("!")) { BgStatusWeatherCurrentTemp = BgStatusWeatherCurrentTemp + "!"; vApplicationSettings["BgStatusWeatherCurrentTemp"] = BgStatusWeatherCurrentTemp; }
 
-                    BgStatusDownloadWeatherTime = DownloadWeather;
-                    vApplicationSettings["BgStatusDownloadWeatherTime"] = DownloadWeather;
+                    BgStatusDownloadWeather = DownloadWeather;
+                    vApplicationSettings["BgStatusDownloadWeather"] = DownloadWeather;
                 }
 
                 //Always set to Never or DateTime

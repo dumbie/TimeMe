@@ -13,7 +13,7 @@
         WeatherTempTextDegrees,
         WeatherTempTextSymbol,
         WeatherTempAsciiIcon,
-        RainFall,
+        RainChance,
         WindSpeed,
         Location,
         Battery,

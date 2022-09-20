@@ -38,7 +38,7 @@ namespace TimeMe
                     string BgStatusWeatherCurrentTemp = vApplicationSettings["BgStatusWeatherCurrentTemp"].ToString();
                     if (!BgStatusWeatherCurrentTemp.EndsWith("!")) { vApplicationSettings["BgStatusWeatherCurrentTemp"] = BgStatusWeatherCurrentTemp + "!"; }
 
-                    vApplicationSettings["BgStatusDownloadWeatherTime"] = DownloadWeather;
+                    vApplicationSettings["BgStatusDownloadWeather"] = DownloadWeather;
                 }
 
                 //Always set to Never or DateTime

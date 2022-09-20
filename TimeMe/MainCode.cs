@@ -448,8 +448,8 @@ namespace TimeMe
                 if ((bool)vApplicationSettings["BackgroundDownload"] && (bool)vApplicationSettings["DownloadWeather"])
                 {
                     string BgStatusDownloadLocation = vApplicationSettings["BgStatusDownloadLocation"].ToString();
-                    string BgStatusDownloadWeatherTime = vApplicationSettings["BgStatusDownloadWeatherTime"].ToString();
-                    if (BgStatusDownloadLocation == "Never" || BgStatusDownloadLocation == "Failed" || BgStatusDownloadWeatherTime == "Never" || BgStatusDownloadWeatherTime == "Failed" || DateTime.Now.Subtract(DateTime.Parse(BgStatusDownloadWeatherTime, vCultureInfoEng)).TotalMinutes >= (int)vApplicationSettings["BackgroundDownloadIntervalMin"])
+                    string BgStatusDownloadWeather = vApplicationSettings["BgStatusDownloadWeather"].ToString();
+                    if (BgStatusDownloadLocation == "Never" || BgStatusDownloadLocation == "Failed" || BgStatusDownloadWeather == "Never" || BgStatusDownloadWeather == "Failed" || DateTime.Now.Subtract(DateTime.Parse(BgStatusDownloadWeather, vCultureInfoEng)).TotalMinutes >= (int)vApplicationSettings["BackgroundDownloadIntervalMin"])
                     {
                         TileUpdateNeeded = true;
                         TileUpdateMessage = AVFunctions.StringAdd(TileUpdateMessage, "weather", ",");

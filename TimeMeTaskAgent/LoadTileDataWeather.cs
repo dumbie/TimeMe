@@ -1,11 +1,11 @@
 ﻿using ArnoldVinkCode;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using TimeMeShared.Classes.ApiOpenMeteo;
 using Windows.Storage;
 
 namespace TimeMeTaskAgent
@@ -20,16 +20,13 @@ namespace TimeMeTaskAgent
                 Debug.WriteLine("Loading the weather tile data.");
 
                 //Check if weather background updates are enabled
-                if (!setBackgroundDownload || !setDownloadWeather || !await AVFunctions.LocalFileExists("TimeMeWeatherSummary.js"))
-                {
-                    return false;
-                }
+                if (!setBackgroundDownload || !setDownloadWeather || !await AVFunctions.LocalFileExists("TimeMeWeatherSummary.js")) { return false; }
 
                 //Load last weather update time
                 if (setDisplayWeatherTileUpdateTime)
                 {
                     //Set the weather update time text
-                    if (BgStatusDownloadWeatherTime != "Never" && BgStatusDownloadWeatherTime != "Failed")
+                    if (BgStatusDownloadWeatherTime != "Never")
                     {
                         DateTime WeatherTime = DateTime.Parse(BgStatusDownloadWeatherTime, vCultureInfoEng);
                         if (setDisplay24hClock)
@@ -43,15 +40,9 @@ namespace TimeMeTaskAgent
                             else { WeatherLastUpdate = WeatherTime.ToString("h:mm tt", vCultureInfoEng); }
                         }
                     }
-                    else
-                    {
-                        WeatherLastUpdate = "Unknown";
-                    }
+                    else { WeatherLastUpdate = "Unknown"; }
                 }
-                else
-                {
-                    WeatherLastUpdate = "";
-                }
+                else { WeatherLastUpdate = ""; }
 
                 //Load weather detailed information
                 if (setDisplayWeatherTileLocation) { WeatherDetailed = BgStatusWeatherCurrentLocationShort; }
@@ -84,147 +75,139 @@ namespace TimeMeTaskAgent
                     //Set not available Weather Forecast styles
                     if (setWeatherTileSizeName == "WeatherForecast")
                     {
-                        WeatherTile1 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">N/A</text><image src=\"ms-appx:///Assets/WeatherSquare" + WeatherIconStyle + "/1000.png\" hint-removeMargin=\"true\"/><text hint-align=\"center\">N/A</text></subgroup>";
+                        WeatherTile1 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">N/A</text><image src=\"ms-appx:///Assets/WeatherSquare" + WeatherIconStyle + "/0.png\" hint-removeMargin=\"true\"/><text hint-align=\"center\">N/A</text></subgroup>";
                         WeatherTile2 = WeatherTile1; WeatherTile3 = WeatherTile1; WeatherTile4 = WeatherTile1; WeatherTile5 = WeatherTile1;
                     }
                     else
                     {
-                        WeatherTile1 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx:///Assets/Weather" + WeatherIconStyle + "/1000.png\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">N/A</text><text hint-align=\"left\" hint-style=\"captionSubtle\">N/A</text></subgroup>";
+                        WeatherTile1 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx:///Assets/Weather" + WeatherIconStyle + "/0.png\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">N/A</text><text hint-align=\"left\" hint-style=\"captionSubtle\">N/A</text></subgroup>";
                         WeatherTile2 = WeatherTile1; WeatherTile3 = WeatherTile1; WeatherTile4 = WeatherTile1; WeatherTile5 = WeatherTile1;
                     }
 
                     //Load weather from json
-                    Forecast jsonForecast;
+                    JObject WeatherJObject;
                     using (Stream OpenStreamForReadAsync = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync("TimeMeWeatherSummary.js"))
                     {
                         using (StreamReader StreamReader = new StreamReader(OpenStreamForReadAsync))
                         {
-                            jsonForecast = JsonConvert.DeserializeObject<Forecast>(await StreamReader.ReadToEndAsync());
+                            WeatherJObject = JObject.Parse(await StreamReader.ReadToEndAsync());
                         }
                     }
 
-                    //Check if weather is available
-                    if (jsonForecast == null)
+                    //Check if there is weather forecast available
+                    if (WeatherJObject["value"][0]["responses"][0]["weather"] == null || WeatherJObject["value"][0]["responses"][0]["weather"][0]["forecast"]["days"].Count() <= 1)
                     {
                         return false;
                     }
                     else
                     {
-                        //Set Weather Units
-                        string unitsTemperature = "°";
-
-                        //Count available days
-                        int forecastDayCount = 5;
-
-                        //Set Overall Weather Forecast
-                        for (int i = 0; i < forecastDayCount; i++)
+                        int ForecastCount = 1;
+                        JToken ForecastJToken = WeatherJObject["value"][0]["responses"][0]["weather"][0]["forecast"]["days"];
+                        foreach (JToken DayJToken in ForecastJToken)
                         {
                             //Set Weather Date
-                            string WeatherDate = jsonForecast.daily.time[i].ToString();
-                            DateTime WeatherDateTime = DateTime.Parse(WeatherDate);
-                            if (setDisplayRegionLanguage)
+                            string WeatherDate = "";
+                            if (DayJToken["daily"]["valid"] != null)
                             {
-                                WeatherDate = AVFunctions.ToTitleCase(WeatherDateTime.ToString("ddd", vCultureInfoReg));
+                                WeatherDate = DayJToken["daily"]["valid"].ToString();
+                                if (!String.IsNullOrEmpty(WeatherDate))
+                                {
+                                    DateTime WeatherDateTime = DateTime.Parse(WeatherDate);
+
+                                    //Check if the day has already passed
+                                    if (WeatherDateTime.AddDays(1) < DateTimeNow) { continue; }
+                                    //if (WeatherDateTime.Day == Tile_DateTimeMin.Day) { WeatherDate = "Tod"; }
+                                    //else
+                                    //{
+                                    if (setDisplayRegionLanguage) { WeatherDate = AVFunctions.ToTitleCase(WeatherDateTime.ToString("ddd", vCultureInfoReg)); }
+                                    else { WeatherDate = WeatherDateTime.ToString("ddd", vCultureInfoEng); }
+                                    //}
+                                }
+                                else { WeatherDate = "N/A"; }
                             }
-                            else
-                            {
-                                WeatherDate = WeatherDateTime.ToString("ddd", vCultureInfoEng);
-                            }
+                            else { WeatherDate = "N/A"; }
 
                             //Set Weather Icon
-                            string WeatherIcon = jsonForecast.daily.weathercode[i].ToString();
-                            string WeatherIconStyle = string.Empty;
-                            if (setWeatherTileSizeName == "WeatherForecast")
+                            string WeatherIcon = "";
+                            string WeatherIconFormat = "WeatherSquare" + WeatherIconStyle;
+                            if (setWeatherTileSizeName == "WeatherCombo") { WeatherIconFormat = "Weather" + WeatherIconStyle; }
+                            if (DayJToken["daily"]["icon"] != null)
                             {
-                                WeatherIconStyle = (bool)vApplicationSettings["DisplayWeatherWhiteIcons"] ? "WeatherSquareWhite" : "WeatherSquare";
-                            }
-                            else
-                            {
-                                WeatherIconStyle = (bool)vApplicationSettings["DisplayWeatherWhiteIcons"] ? "WeatherWhite" : "Weather";
-                            }
-
-                            if (!string.IsNullOrEmpty(WeatherIcon))
-                            {
-                                if (await AVFunctions.AppFileExists("Assets/" + WeatherIconStyle + "/" + WeatherIcon + ".png"))
+                                WeatherIcon = DayJToken["daily"]["icon"].ToString();
+                                if (!String.IsNullOrEmpty(WeatherIcon))
                                 {
-                                    WeatherIcon = "/Assets/" + WeatherIconStyle + "/" + WeatherIcon + ".png";
+                                    if (await AVFunctions.AppFileExists("Assets/" + WeatherIconFormat + "/" + WeatherIcon + ".png")) { WeatherIcon = "/Assets/" + WeatherIconFormat + "/" + WeatherIcon + ".png"; }
+                                    else { WeatherIcon = "/Assets/" + WeatherIconFormat + "/0.png"; }
                                 }
-                                else
-                                {
-                                    WeatherIcon = "/Assets/" + WeatherIconStyle + "/1000.png";
-                                }
+                                else { WeatherIcon = "/Assets/" + WeatherIconFormat + "/0.png"; }
                             }
-                            else
-                            {
-                                WeatherIcon = "/Assets/" + WeatherIconStyle + "/1000.png";
-                            }
+                            else { WeatherIcon = "/Assets/" + WeatherIconFormat + "/0.png"; }
 
                             //Set Weather Highest Temperature
-                            string WeatherTempHigh = jsonForecast.daily.temperature_2m_max[i].ToString();
-                            if (!string.IsNullOrEmpty(WeatherTempHigh))
+                            string WeatherTempHigh = "";
+                            if (DayJToken["daily"]["tempHi"] != null)
                             {
-                                WeatherTempHigh += unitsTemperature;
+                                WeatherTempHigh = DayJToken["daily"]["tempHi"].ToString();
+                                if (!String.IsNullOrEmpty(WeatherTempHigh)) { WeatherTempHigh = WeatherTempHigh + "°"; }
+                                else { WeatherTempHigh = "N/A"; }
                             }
-                            else
-                            {
-                                WeatherTempHigh = "N/A";
-                            }
+                            else { WeatherTempHigh = "N/A"; }
 
                             //Set Weather Lowest Temperature
-                            string WeatherTempLow = jsonForecast.daily.temperature_2m_min[i].ToString();
-                            if (!string.IsNullOrEmpty(WeatherTempLow))
+                            string WeatherTempLow = "";
+                            if (DayJToken["daily"]["tempLo"] != null)
                             {
-                                WeatherTempLow += unitsTemperature;
+                                WeatherTempLow = DayJToken["daily"]["tempLo"].ToString();
+                                if (!String.IsNullOrEmpty(WeatherTempLow)) { WeatherTempLow = WeatherTempLow + "°"; }
+                                else { WeatherTempLow = "N/A"; }
                             }
-                            else
-                            {
-                                WeatherTempLow = "N/A";
-                            }
+                            else { WeatherTempLow = "N/A"; }
 
                             //Set Weather Forecast to XML
                             if (setWeatherTileSizeName == "WeatherForecast")
                             {
                                 if (setShowMoreTiles && (setDisplayWeatherTileLocation || setDisplayWeatherTileProvider || setDisplayWeatherTileUpdateTime))
                                 {
-                                    switch (i)
+                                    switch (ForecastCount)
                                     {
-                                        case 0: { WeatherTile1 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
-                                        case 1: { WeatherTile2 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
-                                        case 2: { WeatherTile3 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
-                                        case 3: { WeatherTile4 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
-                                        case 4: { WeatherTile5 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                        case 1: { WeatherTile1 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                        case 2: { WeatherTile2 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                        case 3: { WeatherTile3 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                        case 4: { WeatherTile4 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                        case 5: { WeatherTile5 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text></subgroup>"; break; }
                                     }
                                 }
                                 else
                                 {
-                                    switch (i)
+                                    switch (ForecastCount)
                                     {
-                                        case 0: { WeatherTile1 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
-                                        case 1: { WeatherTile2 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
-                                        case 2: { WeatherTile3 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
-                                        case 3: { WeatherTile4 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
-                                        case 4: { WeatherTile5 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
+                                        case 1: { WeatherTile1 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
+                                        case 2: { WeatherTile2 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
+                                        case 3: { WeatherTile3 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
+                                        case 4: { WeatherTile4 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
+                                        case 5: { WeatherTile5 = "<subgroup hint-weight=\"1\"><text hint-align=\"center\">" + WeatherDate + "</text><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/><text hint-align=\"center\">" + WeatherTempHigh + "</text><text hint-align=\"center\" hint-style=\"captionsubtle\">" + WeatherTempLow + "</text></subgroup>"; break; }
                                     }
                                 }
                             }
                             else
                             {
-                                switch (i)
+                                switch (ForecastCount)
                                 {
-                                    case 0: { WeatherTile1 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
-                                    case 1: { WeatherTile2 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
-                                    case 2: { WeatherTile3 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
-                                    case 3: { WeatherTile4 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
-                                    case 4: { WeatherTile5 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                    case 1: { WeatherTile1 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                    case 2: { WeatherTile2 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                    case 3: { WeatherTile3 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
+                                    case 4: { WeatherTile4 = "<subgroup hint-textStacking=\"center\" hint-weight=\"45\"><image src=\"ms-appx://" + WeatherIcon + "\" hint-removeMargin=\"true\"/></subgroup><subgroup hint-textStacking=\"center\" hint-weight=\"50\"><text hint-align=\"left\">" + WeatherDate + "</text><text hint-align=\"left\" hint-style=\"captionSubtle\">" + WeatherTempHigh + "</text></subgroup>"; break; }
                                 }
                             }
+                            ForecastCount++;
                         }
                     }
                 }
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine("Failed loading weather tile data: " + ex.Message);
                 return false;
             }
         }

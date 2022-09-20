@@ -98,9 +98,9 @@ namespace TimeMeTaskAgent
                 if (TextPositionUsed(Setting_TextPositions.WindSpeed) && setBackgroundDownload && setDownloadWeather)
                 { TextPositionSet(Setting_TextPositions.WindSpeed, "≋ " + BgStatusWeatherCurrentWindSpeed); }
 
-                //Set rain fall tile texts
-                if (TextPositionUsed(Setting_TextPositions.RainFall) && setBackgroundDownload && setDownloadWeather)
-                { TextPositionSet(Setting_TextPositions.RainFall, "☂ " + BgStatusWeatherCurrentRainChance); }
+                //Set rain chance tile texts
+                if (TextPositionUsed(Setting_TextPositions.RainChance) && setBackgroundDownload && setDownloadWeather)
+                { TextPositionSet(Setting_TextPositions.RainChance, "☂ " + BgStatusWeatherCurrentRainChance); }
 
                 //Set location tile texts
                 if (TextPositionUsed(Setting_TextPositions.Location) && setBackgroundDownload && setDownloadWeather)

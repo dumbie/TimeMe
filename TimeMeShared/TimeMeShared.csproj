@@ -119,8 +119,6 @@
     <Compile Include="..\..\ArnoldVinkCode\UWP\Functions\AVImports.cs">
       <Link>ArnoldVinkCode\Functions\AVImports.cs</Link>
     </Compile>
-    <Compile Include="Classes\ApiOpenMeteo\WmoCode.cs" />
-    <Compile Include="Classes\ApiOpenMeteo\Forecast.cs" />
     <Compile Include="Classes\TextPositions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -20,7 +20,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Image Name="img_BatteryLevel" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-2,0,0,0" MaxHeight="25" Source="/Assets/Icons/BatteryLevel.png"/>
                     <TextBlock Name="txt_BatteryLevel" HorizontalAlignment="Left" VerticalAlignment="Center" Text="" Margin="5,0,8,2" FontSize="24" Style="{StaticResource TextBlockWhite}"/>
-                    <Image Name="img_WeatherIcon" HorizontalAlignment="Left" VerticalAlignment="Center" MaxHeight="25" Source="/Assets/Weather/1000.png"/>
+                    <Image Name="img_WeatherIcon" HorizontalAlignment="Left" VerticalAlignment="Center" MaxHeight="25" Source="/Assets/Weather/0.png"/>
                     <TextBlock Name="txt_WeatherIcon" HorizontalAlignment="Left" VerticalAlignment="Center" Text="" Margin="8,0,8,2" FontSize="24" Style="{StaticResource TextBlockWhite}"/>
                     <Image Name="img_AlarmClock" HorizontalAlignment="Left" VerticalAlignment="Center" MaxHeight="25" Source="/Assets/Icons/AlarmClock.png"/>
                 </StackPanel>
