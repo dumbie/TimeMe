@@ -58,11 +58,12 @@ namespace TimeMeTaskAgent
                 }
 
                 //Download and save the weather location
-                string LocationResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri("https://service.weather.microsoft.com/" + DownloadWeatherLanguage + "/locations/search/" + DownloadWeatherLocation));
+                string apiUrl = "https://api.msn.com/weather/locations/search?locale=" + DownloadWeatherLanguage + "&apiKey=OkWqHMuutahBXs3dBoygqCjgXRt6CV4i5V7SRQURrT&query=" + DownloadWeatherLocation;
+                string LocationResult = await AVDownloader.DownloadStringAsync(5000, "TimeMe", null, new Uri(apiUrl));
 
                 //Check if there is location data available
                 JObject LocationJObject = JObject.Parse(LocationResult);
-                if (LocationJObject["responses"][0]["locations"] == null || !LocationJObject["responses"][0]["locations"].Any())
+                if (LocationJObject["value"][0]["responses"][0]["locations"] == null || !LocationJObject["value"][0]["responses"][0]["locations"].Any())
                 {
                     Debug.WriteLine("Failed no overall info for location found.");
                     BackgroundStatusUpdateSettings(null, "Failed", null, null, "GpsNoLocationOverall");
@@ -70,7 +71,7 @@ namespace TimeMeTaskAgent
                 }
                 else
                 {
-                    JToken HttpJTokenGeo = LocationJObject["responses"][0]["locations"][0];
+                    JToken HttpJTokenGeo = LocationJObject["value"][0]["responses"][0]["locations"][0];
 
                     //Set current location coords
                     if (HttpJTokenGeo["coordinates"]["lat"] != null && HttpJTokenGeo["coordinates"]["lon"] != null)
