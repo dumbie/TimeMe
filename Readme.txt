@@ -34,10 +34,14 @@ When you are walking into any problems or bugs you can goto the support page her
 Feel free to make a donation on: http://donation.arnoldvink.com
 
 | Changelog
-v3.8.0.0 (15-October-2018)
-- You can now change the time's horizontal display position.
+v3.14.0.0 (17-January-2023)
+- Added weather alerts to the weather page.
+- Added day and night weather to weather page.
 * Miscellaneous application improvements and fixes.
 * Please run the application after updating the app.
+
+v3.8.0.0 (15-October-2018)
+- You can now change the time's horizontal display position.
 
 v3.7.3.0 (8-August-2017)
 - Added wind direction information to weather status.
