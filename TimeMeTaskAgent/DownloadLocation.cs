@@ -89,9 +89,18 @@ namespace TimeMeTaskAgent
                     }
 
                     //Set weather current location
-                    if (HttpJTokenGeo["displayName"] != null)
+                    if (HttpJTokenGeo["displayName"] != null || HttpJTokenGeo["name"] != null)
                     {
-                        string LocationName = HttpJTokenGeo["displayName"].ToString();
+                        string LocationName = string.Empty;
+                        if (HttpJTokenGeo["displayName"] != null)
+                        {
+                            LocationName = HttpJTokenGeo["displayName"].ToString();
+                        }
+                        else if (HttpJTokenGeo["name"] != null)
+                        {
+                            LocationName = HttpJTokenGeo["name"].ToString();
+                        }
+
                         if (!String.IsNullOrEmpty(LocationName))
                         {
                             BgStatusWeatherCurrentLocationFull = LocationName;

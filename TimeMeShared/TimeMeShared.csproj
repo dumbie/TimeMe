@@ -101,9 +101,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\ArnoldVinkCode\Shared\Functions\AVTimeZones.cs">
-      <Link>ArnoldVinkCode\Functions\AVTimeZones.cs</Link>
-    </Compile>
     <Compile Include="..\..\ArnoldVinkCode\UWP\Functions\AVAnimations.cs">
       <Link>ArnoldVinkCode\Functions\AVAnimations.cs</Link>
     </Compile>
@@ -119,6 +116,9 @@
     <Compile Include="..\..\ArnoldVinkCode\UWP\Functions\AVImports.cs">
       <Link>ArnoldVinkCode\Functions\AVImports.cs</Link>
     </Compile>
+    <Compile Include="..\..\ArnoldVinkCode\UWP\Functions\AVTimeZones.cs">
+      <Link>ArnoldVinkCode\Functions\AVTimeZones.cs</Link>
+    </Compile>
     <Compile Include="Classes\TextPositions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -127,7 +127,7 @@
       <Version>6.2.14</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.1</Version>
+      <Version>13.0.2</Version>
     </PackageReference>
     <PackageReference Include="Win2D.uwp">
       <Version>1.23.0</Version>

@@ -142,53 +142,56 @@
                 <Image Name="tab_Weather_ImgTemperatureCur" Stretch="UniformToFill"/>
                 <Image Name="tab_Weather_ImgWallpaper" Opacity="0.25" Stretch="UniformToFill"/>
 
-                <StackPanel Margin="5,5,5,5">
-                    <TextBlock Name="txt_ForecastInformation" Style="{StaticResource TextBlockPageTitleBlack}" Text="Loading weather information please wait..."/>
-                    <StackPanel Name="sp_WeatherCurrent" Visibility="Collapsed">
-                        <TextBlock Name="txt_ForecastLocation" Margin="0,-5,0,0" Style="{StaticResource TextBlockPageTitleWhite}" FontWeight="Normal"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Name="img_ForecastIcon" Height="25" Margin="0,0,10,0"/>
-                            <TextBlock Name="txt_ForecastTemperatureHigh" Style="{StaticResource TextBlockPageTitleWhite}" Foreground="#FF3900"/>
-                            <TextBlock Name="txt_ForecastTemperatureLow" Style="{StaticResource TextBlockPageTitleWhite}" Foreground="#00C6FF"/>
-                            <TextBlock Name="txt_ForecastCondition" Margin="6,0,0,0" Style="{StaticResource TextBlockPageTitleWhite}"/>
-                        </StackPanel>
-                        <StackPanel Name="sp_WeatherPrecipitation" Orientation="Horizontal" Margin="0,1,0,0">
-                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Precipitation.png"/>
-                            <TextBlock Name="txt_WeatherPrecipitation" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
-                        </StackPanel>
-                        <StackPanel Name="sp_WeatherHumidity" Orientation="Horizontal" Margin="2.5,1,0,0">
-                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Humidity.png"/>
-                            <TextBlock Margin="1,0,0,0" Name="txt_WeatherHumidity" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
-                        </StackPanel>
-                        <StackPanel Name="sp_WeatherVisibility" Orientation="Horizontal" Margin="0,1,0,0">
-                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Visibility.png"/>
-                            <TextBlock Name="txt_WeatherVisibility" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
-                        </StackPanel>
-                        <StackPanel Name="sp_WeatherWindSpeed" Orientation="Horizontal" Margin="0,1,0,0">
-                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_WindSpeed.png"/>
-                            <TextBlock Name="txt_WeatherWindSpeed" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
-                        </StackPanel>
-                        <StackPanel Name="sp_WeatherPressure" Orientation="Horizontal" Margin="0,1,0,0">
-                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Pressure.png"/>
-                            <TextBlock Name="txt_WeatherPressure" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
-                        </StackPanel>
-                        <StackPanel Name="sp_WeatherUv" Orientation="Horizontal" Margin="0,1,0,0">
-                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_UvIndex.png"/>
-                            <TextBlock Name="txt_WeatherUv" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
-                        </StackPanel>
-                        <StackPanel Name="sp_WeatherSunrise" Orientation="Horizontal">
-                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Sunrise.png"/>
-                            <TextBlock Name="txt_WeatherSunrise" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
-                        </StackPanel>
-                        <StackPanel Name="sp_WeatherSunset" Orientation="Horizontal">
-                            <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Sunset.png"/>
-                            <TextBlock Name="txt_WeatherSunset" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                <ScrollViewer Margin="5,5,5,5" Style="{StaticResource ScrollViewerVertical}" VerticalAlignment="Top">
+                    <StackPanel>
+                        <TextBlock Name="txt_ForecastInformation" Style="{StaticResource TextBlockPageTitleBlack}" Text="Loading weather information please wait..."/>
+                        <StackPanel Name="sp_WeatherCurrent" Visibility="Collapsed">
+                            <TextBlock Name="txt_ForecastLocation" Margin="0,-5,0,0" Style="{StaticResource TextBlockPageTitleWhite}" FontWeight="Normal"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Name="img_ForecastIcon" Height="25" Margin="0,0,10,0"/>
+                                <TextBlock Name="txt_ForecastTemperatureHigh" Style="{StaticResource TextBlockPageTitleWhite}" Foreground="#FF3900"/>
+                                <TextBlock Name="txt_ForecastTemperatureLow" Style="{StaticResource TextBlockPageTitleWhite}" Foreground="#00C6FF"/>
+                                <TextBlock Name="txt_ForecastCondition" TextWrapping="Wrap" Margin="5,0,0,0" Style="{StaticResource TextBlockPageTitleWhite}"/>
+                            </StackPanel>
+                            <StackPanel Name="sp_WeatherPrecipitation" Orientation="Horizontal" Margin="0,1,0,0">
+                                <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Precipitation.png"/>
+                                <TextBlock Name="txt_WeatherPrecipitation" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                            </StackPanel>
+                            <StackPanel Name="sp_WeatherHumidity" Orientation="Horizontal" Margin="2.5,1,0,0">
+                                <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Humidity.png"/>
+                                <TextBlock Margin="1,0,0,0" Name="txt_WeatherHumidity" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                            </StackPanel>
+                            <StackPanel Name="sp_WeatherVisibility" Orientation="Horizontal" Margin="0,1,0,0">
+                                <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Visibility.png"/>
+                                <TextBlock Name="txt_WeatherVisibility" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                            </StackPanel>
+                            <StackPanel Name="sp_WeatherWindSpeed" Orientation="Horizontal" Margin="0,1,0,0">
+                                <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_WindSpeed.png"/>
+                                <TextBlock Name="txt_WeatherWindSpeed" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                            </StackPanel>
+                            <StackPanel Name="sp_WeatherPressure" Orientation="Horizontal" Margin="0,1,0,0">
+                                <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Pressure.png"/>
+                                <TextBlock Name="txt_WeatherPressure" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                            </StackPanel>
+                            <StackPanel Name="sp_WeatherUv" Orientation="Horizontal" Margin="0,1,0,0">
+                                <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_UvIndex.png"/>
+                                <TextBlock Name="txt_WeatherUv" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                            </StackPanel>
+                            <StackPanel Name="sp_WeatherSunrise" Orientation="Horizontal">
+                                <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Sunrise.png"/>
+                                <TextBlock Name="txt_WeatherSunrise" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                            </StackPanel>
+                            <StackPanel Name="sp_WeatherSunset" Orientation="Horizontal">
+                                <Image MaxHeight="23" MaxWidth="23" Margin="0,0,10,0" Source="Assets/WeatherOther/tab_Sunset.png"/>
+                                <TextBlock Name="txt_WeatherSunset" Style="{StaticResource TextBlockPageTitleWhite}" FontSize="20"/>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </ScrollViewer>
 
                 <ScrollViewer Name="sv_WeatherForecast" Style="{StaticResource ScrollViewerHorizontal}" VerticalAlignment="Bottom">
                     <StackPanel>
+                        <TextBlock Name="txt_ForecastAlert" Margin="5,0,0,0" Style="{StaticResource TextBlockWhite}" Foreground="Orange" Opacity="0.60"/>
                         <TextBlock Name="txt_ForecastLastupdate" Margin="5,0,0,0" Style="{StaticResource TextBlockWhite}" Opacity="0.60"/>
                         <ListBox Name="lb_ForecastListBox" Style="{StaticResource ListBoxHorizontal}" SelectionMode="Single" Tapped="lb_ForecastListBox_Tapped">
                             <ListBox.ItemTemplate>
@@ -202,7 +205,7 @@
                                             <StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Image Height="30" HorizontalAlignment="Left" Source="{Binding WeatherIcon}"/>
-                                                    <TextBlock Margin="3,18,0,0" Text="{Binding WeatherConditionDay}" Style="{StaticResource TextBlockWhite}"/>
+                                                    <TextBlock Margin="3" Text="{Binding WeatherConditionDay}" Style="{StaticResource TextBlockWhite}"/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                                                     <Image Height="18" Margin="0,0,5,0" Source="Assets/WeatherOther/tab_Temperature.png"/>

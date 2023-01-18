@@ -121,8 +121,32 @@ namespace TimeMe
                     //Set Weather Alerts
                     if (AlertsJToken != null)
                     {
-                        if (AlertsJToken.ToString() == "0") { txt_ForecastLocation.Foreground = new SolidColorBrush(Colors.White); }
-                        else { txt_ForecastLocation.Foreground = new SolidColorBrush(Colors.Orange); }
+                        if (!AlertsJToken.Any())
+                        {
+                            txt_ForecastLocation.Foreground = new SolidColorBrush(Colors.White);
+                            txt_ForecastAlert.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            txt_ForecastLocation.Foreground = new SolidColorBrush(Colors.Orange);
+                            if (AlertsJToken[0]["title"] != null)
+                            {
+                                string WeatherAlert = AlertsJToken[0]["title"].ToString();
+                                if (string.IsNullOrWhiteSpace(WeatherAlert))
+                                {
+                                    txt_ForecastAlert.Visibility = Visibility.Collapsed;
+                                }
+                                else
+                                {
+                                    txt_ForecastAlert.Text = "Alert: " + WeatherAlert;
+                                    txt_ForecastAlert.Visibility = Visibility.Visible;
+                                }
+                            }
+                            else
+                            {
+                                txt_ForecastAlert.Visibility = Visibility.Collapsed;
+                            }
+                        }
                     }
 
                     //Set weather current temperature and color
@@ -398,13 +422,15 @@ namespace TimeMe
                     else { img_ForecastIcon.Source = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/" + WeatherIconStyle + "/0.png", UriKind.Absolute) }; }
 
                     //Set Weather Condition
-                    if (ForecastJToken["daily"]["pvdrCap"] != null)
+                    string WeatherConditionDay = "";
+                    if (ForecastJToken["daily"]["day"]["pvdrCap"] != null && ForecastJToken["daily"]["night"]["pvdrCap"] != null)
                     {
-                        string WeatherCondition = ForecastJToken["daily"]["pvdrCap"].ToString();
-                        if (!String.IsNullOrEmpty(WeatherCondition)) { txt_ForecastCondition.Text = WeatherCondition; }
-                        else { txt_ForecastCondition.Text = "Not Available"; }
+                        WeatherConditionDay = ForecastJToken["daily"]["day"]["pvdrCap"].ToString();
+                        WeatherConditionDay += " / " + ForecastJToken["daily"]["night"]["pvdrCap"].ToString();
+                        if (string.IsNullOrEmpty(WeatherConditionDay)) { WeatherConditionDay = "Not Available"; }
                     }
-                    else { txt_ForecastCondition.Text = "Not Available"; }
+                    else { WeatherConditionDay = "Not Available"; }
+                    txt_ForecastCondition.Text = WeatherConditionDay;
 
                     //Set Weather Humidity
                     if (ForecastJToken["daily"]["rhHi"] != null)
@@ -603,10 +629,11 @@ namespace TimeMe
 
                         //Set Weather Condition
                         string WeatherConditionDay = "";
-                        if (DayJToken["daily"]["pvdrCap"] != null)
+                        if (DayJToken["daily"]["day"]["pvdrCap"] != null && DayJToken["daily"]["night"]["pvdrCap"] != null)
                         {
-                            WeatherConditionDay = DayJToken["daily"]["pvdrCap"].ToString();
-                            if (String.IsNullOrEmpty(WeatherConditionDay)) { WeatherConditionDay = "Not Available"; }
+                            WeatherConditionDay = DayJToken["daily"]["day"]["pvdrCap"].ToString();
+                            WeatherConditionDay += "\n" + DayJToken["daily"]["night"]["pvdrCap"].ToString();
+                            if (string.IsNullOrEmpty(WeatherConditionDay)) { WeatherConditionDay = "Not Available"; }
                         }
                         else { WeatherConditionDay = "Not Available"; }
 
