@@ -1,5 +1,6 @@
 ﻿using ArnoldVinkCode;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,37 +56,49 @@ namespace TimeMe
                     }
 
                     //Add new year if no events are set
-                    if (!XDocument.Descendants("TimeMeCountdown").Elements("Count").Any()) { XDocument.Element("TimeMeCountdown").Add(new XElement("Count", new XAttribute("CountId", new Random().Next(1, 999999999).ToString()), new XAttribute("CountName", "New Year's Day"), new XAttribute("CountDate", new DateTime((DateTime.Now.AddYears(1).Year), 1, 1).Date))); }
+                    if (!XDocument.Descendants("TimeMeCountdown").Elements("Count").Any())
+                    {
+                        string CountdownId = DateTime.Now.Ticks.ToString();
+                        XDocument.Element("TimeMeCountdown").Add(new XElement("Count", new XAttribute("CountId", CountdownId), new XAttribute("CountName", "New Year's Day"), new XAttribute("CountDate", new DateTime((DateTime.Now.AddYears(1).Year), 1, 1).Date)));
+                    }
 
                     //Save the made changes to XML file
                     StorageFile CreateFileAsync = await ApplicationData.Current.LocalFolder.CreateFileAsync("TimeMeCountdown.xml", CreationCollisionOption.ReplaceExisting);
                     using (Stream OpenStreamForWriteAsync = await CreateFileAsync.OpenStreamForWriteAsync()) { XDocument.Save(OpenStreamForWriteAsync); }
 
                     //Load all set countdown events from XML
-                    foreach (XElement XElement in XDocument.Descendants("TimeMeCountdown").Elements("Count"))
+                    IEnumerable<XElement> xmlCountdownEvents = XDocument.Descendants("TimeMeCountdown").Elements("Count").OrderBy(x => x.Attribute("CountDate").Value).ThenBy(x => x.Attribute("CountName").Value);
+                    foreach (XElement XElement in xmlCountdownEvents)
                     {
                         DateTime LoadedDate = DateTime.Parse(XElement.Attribute("CountDate").Value);
 
-                        //Datetime to string for listview
+                        //Datetime to string
                         string ConvertedDate = "";
                         if ((bool)vApplicationSettings["DisplayRegionLanguage"]) { ConvertedDate = AVFunctions.ToTitleCase(LoadedDate.Date.ToString("d MMMM yyyy", vCultureInfoReg)); }
                         else { ConvertedDate = LoadedDate.Date.ToString("d MMMM yyyy", vCultureInfoEng); }
 
-                        //Calculate days left for listview
-                        string ConvertedDays = (LoadedDate.Date.Subtract(DateTime.Now.Date).Days).ToString();
+                        //Calculate the days left
+                        int ConvertedDaysInt = LoadedDate.Date.Subtract(DateTime.Now.Date).Days;
+                        string ConvertedDaysString = ConvertedDaysInt.ToString();
 
                         //Add countdown event to listview
-                        if (ConvertedDays == "0") { lb_CountdownListBox.Items.Insert(0, new CountdownList() { CountId = XElement.Attribute("CountId").Value, CountName = XElement.Attribute("CountName").Value, CountDate = ConvertedDate, CountDays = "Tod" }); }
-                        else { lb_CountdownListBox.Items.Insert(0, new CountdownList() { CountId = XElement.Attribute("CountId").Value, CountName = XElement.Attribute("CountName").Value, CountDate = ConvertedDate, CountDays = ConvertedDays }); }
+                        if (ConvertedDaysString == "0")
+                        {
+                            lb_CountdownListBox.Items.Add(new CountdownList() { CountId = XElement.Attribute("CountId").Value, CountName = XElement.Attribute("CountName").Value, CountDate = ConvertedDate, CountDays = "Tod" });
+                        }
+                        else
+                        {
+                            lb_CountdownListBox.Items.Add(new CountdownList() { CountId = XElement.Attribute("CountId").Value, CountName = XElement.Attribute("CountName").Value, CountDate = ConvertedDate, CountDays = ConvertedDaysString });
+                        }
                     }
-
-                    //Sort countdown events by days
-                    //lb_CountdownListBox.Items.Cast<CountdownList>().OrderBy(x => x.CountDays);
 
                     txt_CountdownDates.Text = "Currently set event countdown dates:";
                 }
             }
-            catch { txt_CountdownDates.Text = "Failed to load the countdown events."; }
+            catch
+            {
+                txt_CountdownDates.Text = "Failed to load the countdown events.";
+            }
         }
 
         //Add Countdown Event
@@ -116,10 +129,11 @@ namespace TimeMe
                 else { ConvertedDate = datepick_CountDate.Date.Date.ToString("d MMMM yyyy", vCultureInfoEng); }
 
                 //Calculate days left for listview
-                string ConvertedDays = (datepick_CountDate.Date.Date.Subtract(DateTime.Now.Date).Days).ToString();
+                int ConvertedDaysInt = datepick_CountDate.Date.Date.Subtract(DateTime.Now.Date).Days;
+                string ConvertedDaysString = ConvertedDaysInt.ToString();
 
                 //Set the countdown item id
-                string CountdownId = new Random().Next(1, 999999999).ToString();
+                string CountdownId = DateTime.Now.Ticks.ToString();
 
                 //Save countdown event to XML file
                 using (Stream OpenStreamForReadAsync = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync("TimeMeCountdown.xml"))
@@ -143,13 +157,13 @@ namespace TimeMe
                     using (Stream OpenStreamForWriteAsync = await CreateFileAsync.OpenStreamForWriteAsync()) { XDocument.Save(OpenStreamForWriteAsync); }
                 }
 
-                //Add countdown event to listview
-                lb_CountdownListBox.Items.Insert(0, new CountdownList() { CountId = CountdownId, CountName = txtbox_CountName.Text, CountDate = ConvertedDate, CountDays = ConvertedDays });
-
-                //Sort countdown events by days
-                //lb_CountdownListBox.Items.Cast<CountdownList>().OrderBy(x => x.CountDays);
+                //Reload countdown events
+                await CountdownLoad();
             }
-            catch { await new MessageDialog("Failed to add the countdown event, please try again.", "TimeMe").ShowAsync(); }
+            catch
+            {
+                await new MessageDialog("Failed to add the countdown event, please try again.", "TimeMe").ShowAsync();
+            }
         }
 
         //Remove Countdown Event
@@ -165,11 +179,11 @@ namespace TimeMe
                 }
 
                 //Check the selected removal items
-                foreach (object SelItem in lb_CountdownListBox.SelectedItems)
+                foreach (CountdownList SelectedItem in lb_CountdownListBox.SelectedItems)
                 {
-                    CountdownList SelectedItem = (CountdownList)SelItem;
                     try
                     {
+                        //Remove countdown event from xml
                         using (Stream OpenStreamForReadAsync = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync("TimeMeCountdown.xml"))
                         {
                             XDocument XDocument = XDocument.Load(OpenStreamForReadAsync);
@@ -183,13 +197,19 @@ namespace TimeMe
                             using (Stream OpenStreamForWriteAsync = await CreateFileAsync.OpenStreamForWriteAsync()) { XDocument.Save(OpenStreamForWriteAsync); }
                         }
                     }
-                    catch { await new MessageDialog("Failed to remove the countdown event, please try again.", "TimeMe").ShowAsync(); }
+                    catch
+                    {
+                        await new MessageDialog("Failed to remove the countdown event, please try again.", "TimeMe").ShowAsync();
+                    }
                 }
 
-                //Reload countdown items
+                //Reload countdown events
                 await CountdownLoad();
             }
-            catch { await new MessageDialog("Failed to remove the countdown event, please try again.", "TimeMe").ShowAsync(); }
+            catch
+            {
+                await new MessageDialog("Failed to remove the countdown event, please try again.", "TimeMe").ShowAsync();
+            }
         }
 
         //Reset Countdown Xml Events

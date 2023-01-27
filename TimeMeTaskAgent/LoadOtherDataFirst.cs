@@ -1,13 +1,9 @@
 ﻿using ArnoldVinkCode;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Windows.Storage;
 
 namespace TimeMeTaskAgent
 {
@@ -115,31 +111,7 @@ namespace TimeMeTaskAgent
                 //Load countdown event information
                 if (TextPositionUsed(Setting_TextPositions.Countdown) || setLockCountdown || setNotiCountdownTime)
                 {
-                    //Load first countdown event from XML
-                    using (Stream OpenStreamForReadAsync = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync("TimeMeCountdown.xml"))
-                    {
-                        XDocument XDocument = XDocument.Load(OpenStreamForReadAsync);
-                        OpenStreamForReadAsync.Dispose();
-
-                        IEnumerable<XElement> XmlCountdownEvents = XDocument.Descendants("TimeMeCountdown").Elements("Count");
-                        if (XmlCountdownEvents.Any())
-                        {
-                            XElement FirstEvent = XmlCountdownEvents.Last();
-                            DateTime LoadedDate = DateTime.Parse(FirstEvent.Attribute("CountDate").Value);
-
-                            //Datetime to string
-                            string ConvertedDate = "";
-                            if ((bool)vApplicationSettings["DisplayRegionLanguage"]) { ConvertedDate = AVFunctions.ToTitleCase(LoadedDate.Date.ToString("d MMMM yyyy", vCultureInfoReg)); }
-                            else { ConvertedDate = LoadedDate.Date.ToString("d MMMM yyyy", vCultureInfoEng); }
-
-                            //Calculate the days left
-                            CountdownEventDate = (LoadedDate.Date.Subtract(DateTimeNow.Date).Days).ToString();
-                            if (CountdownEventDate == "0") { CountdownEventDate = "today"; }
-
-                            //Set the countdown name
-                            CountdownEventName = FirstEvent.Attribute("CountName").Value;
-                        }
-                    }
+                    await LoadCountdownEvent();
 
                     //Notification - Countdown Time
                     ShowNotiCountdownTime();

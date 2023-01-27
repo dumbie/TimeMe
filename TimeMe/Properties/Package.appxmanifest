@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp uap3">
-  <Identity Name="54655ArnoldVink.TimeMeTile" Publisher="CN=E50820D8-A817-4517-9CD7-9B57976E3736" Version="3.14.0.0" />
+  <Identity Name="54655ArnoldVink.TimeMeTile" Publisher="CN=E50820D8-A817-4517-9CD7-9B57976E3736" Version="3.14.1.0" />
   <mp:PhoneIdentity PhoneProductId="6faf5038-d129-4f5c-a3c2-8d8582a33e2f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>TimeMe Tile</DisplayName>

@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="LiveTiles\ClockTileWideBig.cs" />
     <Compile Include="LiveTiles\ClockTileWideBigMore.cs" />
+    <Compile Include="LoadCountdownEvent.cs" />
     <Compile Include="TileTextPosition.cs" />
     <Compile Include="DownloadBackground.cs" />
     <Compile Include="DownloadLocation.cs" />

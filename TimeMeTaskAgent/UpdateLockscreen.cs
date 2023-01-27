@@ -29,7 +29,7 @@ namespace TimeMeTaskAgent
                 //Load lockscreen countdown
                 if (setLockCountdown && !String.IsNullOrEmpty(CountdownEventDate))
                 {
-                    string CalenderCountInfo = CountdownEventName + " (" + CountdownEventDate + "d)";
+                    string CalenderCountInfo = CountdownEventName + " (" + CountdownEventDate + ")";
                     if (String.IsNullOrEmpty(LockscreenText)) { LockscreenText = CalenderCountInfo + LockscreenEnter; }
                     else { LockscreenText = LockscreenText + "\n" + CalenderCountInfo + LockscreenEnter; }
                 }
