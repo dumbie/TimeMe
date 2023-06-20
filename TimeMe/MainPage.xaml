@@ -140,7 +140,7 @@
             <Grid Name="tab_Weather" Visibility="Collapsed">
                 <Image Name="tab_Weather_ImgTemperaturePre" Stretch="UniformToFill"/>
                 <Image Name="tab_Weather_ImgTemperatureCur" Stretch="UniformToFill"/>
-                <Image Name="tab_Weather_ImgWallpaper" Opacity="0.2" Stretch="UniformToFill"/>
+                <Image Name="tab_Weather_ImgWallpaper" Opacity="0.20" Stretch="UniformToFill"/>
 
                 <ScrollViewer Margin="5,5,5,5" Style="{StaticResource ScrollViewerVertical}" VerticalAlignment="Top">
                     <StackPanel>
@@ -241,8 +241,20 @@
 
                 <ScrollViewer Name="sv_WeatherForecast" Style="{StaticResource ScrollViewerHorizontal}" VerticalAlignment="Bottom">
                     <StackPanel>
-                        <TextBlock Name="txt_ForecastAlert" Margin="5,0,0,0" Style="{StaticResource TextBlockWhite}" Foreground="Orange" Opacity="0.60"/>
-                        <TextBlock Name="txt_ForecastLastupdate" Margin="5,0,0,0" Style="{StaticResource TextBlockWhite}" Opacity="0.60"/>
+                        <StackPanel Name="stackpanel_ForecastStatus" Margin="5,5,5,5" HorizontalAlignment="Left">
+                            <Border Padding="5,0,5,0" CornerRadius="5,5,5,5" HorizontalAlignment="Left">
+                                <Border.Background>
+                                    <SolidColorBrush Color="Black" Opacity="0.50"/>
+                                </Border.Background>
+                                <TextBlock Name="txt_ForecastAlert" Style="{StaticResource TextBlockWhite}" Foreground="Orange" Opacity="0.75"/>
+                            </Border>
+                            <Border Padding="5,0,5,0" CornerRadius="5,5,5,5" HorizontalAlignment="Left">
+                                <Border.Background>
+                                    <SolidColorBrush Color="Black" Opacity="0.50"/>
+                                </Border.Background>
+                                <TextBlock Name="txt_ForecastLastupdate" Style="{StaticResource TextBlockWhite}" Opacity="0.75"/>
+                            </Border>
+                        </StackPanel>
                         <ListBox Name="lb_ForecastListBox" Style="{StaticResource ListBoxHorizontal}" SelectionMode="Single" Tapped="lb_ForecastListBox_Tapped">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
